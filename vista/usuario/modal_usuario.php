@@ -14,8 +14,8 @@
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Empleado:</label>
             <div class="col-sm-7">
-              <select class="form-control" id="fkID_persona" >
-                <?php getSelectPersona();?>
+              <select class="form-control" id="fkID_persona" required>
+                <?php getSelectPersona();?> 
               </select>
             </div>
             <div class="col-sm-2 text-danger">
@@ -25,23 +25,28 @@
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Cargo:</label>
             <div class="col-sm-7">
-              <input class="form-control" type="text" id="nombre_cargo">
+              <input class="form-control" type="text" id="nombre_cargo" required>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Usuario:</label>
             <div class="col-sm-7">
-              <input class="form-control" type="text" id="nombre_usuario" >
+              <input class="form-control" type="text" id="nombre_usuario" required>
             </div>
             <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Password:</label>
             <div class="col-sm-7">
-              <input class="form-control" type="Password" id="pass_usuario">
+              <input class="form-control" type="Password" id="pass_usuario" required>
             </div>
             <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">

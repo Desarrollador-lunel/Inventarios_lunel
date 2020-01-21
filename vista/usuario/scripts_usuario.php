@@ -19,19 +19,24 @@
 
 	//Funcion guardar empleado
 	$("#btn_guardar_Empleado").click(function(){
+		respuesta = validar_campos_empleado();
+		if (respuesta) {
 		crea_empleado();
-		return false;
+		}
 	});
 
 	//Funcion guardar Usuario
-	$("#btn_guardar_Usuario").click(function(){  
-		accion = $(this).attr('data-accion');
-		if(accion == 'crear'){
-			crea_Usuario();
-		}
-		if(accion == 'editar'){
-			alertify.alert('Alert Message!', function(){ edita_Usuario(); });
-		}
+	$("#btn_guardar_Usuario").click(function(){ 
+		respuesta = validar_campos();
+		if (respuesta) {
+			accion = $(this).attr('data-accion');
+			if(accion == 'crear'){
+				crea_Usuario();
+			}
+			if(accion == 'editar'){
+				 edita_Usuario();
+			}
+		} 
 	});
 
 	//Funcion para guardar el Usuario
@@ -43,12 +48,8 @@
 	      url:  "../controlador/ajaxUsuario.php",
 	      data: 'nombre_usuario='+ nombre_usuario + '&pass_usuario='+ pass_usuario + '&fkID_persona='+ fkID_persona + '&tipo=inserta',
 	    success:function(r){
-			if (r==1) {
-				$('#tabla').load('usuario/Vusuario.php')
-				alertify.success("Agregado con exito");
-			} else{  
-				alertify.error("fallo el servidor");
-			}
+			alertify.success('Creado correctamente');
+		  	setTimeout('cargar_sitio()',1000);
 		}
 	})
 	}
@@ -104,12 +105,8 @@
 	      url: "../controlador/ajaxUsuario.php",
 	      data: 'id_usuario='+id_usuario+'&nombre_usuario='+  nombre_usuario +'&pass_antiguo='+  pass_antiguo + '&pass_usuario='+ pass_usuario + '&fkID_persona='+ fkID_persona + '&tipo=edita',
 	     success:function(r){
-			if (r!=1) {
-				alertify.error("fallo el servidor");
-			} else{ 
-				$('#tabla').load('usuario/Vusuario.php'); 
-				alertify.success("Actualizado con exito");
-			}
+			alertify.success('Editado correctamente');
+		  	setTimeout('cargar_sitio()',1000);
 		}
 	})
 	}
@@ -294,6 +291,61 @@
    
         });
 
+	//Campos incompletos de usuario
+	function validar_campos(){
+		var respuesta = true;
+		if($("#nombre_cargo").val().length == 0){
+			respuesta = false;
+		}
+		if($('#fkID_persona').val().trim() == 0){
+			respuesta = false;
+		}
+		if($("#nombre_usuario").val().length == 0){
+			respuesta = false;
+		}
+		if($("#pass_usuario").val().length == 0){
+			respuesta = false;
+		}
+		if(respuesta == false){
+			alert('Complete el formulario');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	//Campos incompletos de empleado
+	function validar_campos_empleado(){
+		var respuesta = true;
+		if($("#nombre_empleado").val().length == 0){
+			respuesta = false;
+		}
+		if($('#fkID_cargo').val().trim() == 0){
+			respuesta = false;
+		}
+		if($("#apellido_empleado").val().length == 0){
+			respuesta = false;
+		}
+		if($("#cedula_empleado").val().length == 0){
+			respuesta = false;
+		}
+		if($("#email_empleado").val().length == 0){
+			respuesta = false;
+		}
+		if($('#fkID_proyecto').val().trim() == 0){
+			respuesta = false;
+		}
+		if($('#fkID_territorial').val().trim() == 0){
+			respuesta = false;
+		}
+		if(respuesta == false){
+			alert('Complete el formulario');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	//Funcion para el Datatable
     $(document).ready(function () {
         $('#tablaUsuarios').DataTable(
@@ -325,4 +377,12 @@
             }
         );
     });
+
+    //Funcion para cargar sitio
+    function cargar_sitio(){
+  		$("#modalEquipo").removeClass("show");
+ 		$('body').removeClass('modal-open');//eliminamos la clase del body para poder hacer scroll
+  		$('.modal-backdrop').remove();//eliminamos el backdrop del modal
+  		$('#tabla').load('usuario/Vusuario.php');
+    }
 </script>

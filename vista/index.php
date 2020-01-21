@@ -29,7 +29,7 @@
                     <!-- Nav Item - Dashboard -->
                     <li class="nav-item active">
                         <a class="nav-link" href="index.html">
-                            <i class="fas fa-home">
+                            <i class="fas fa-home" style="cursor: pointer">
                             </i>
                             <span>
                                 Inicio
@@ -48,7 +48,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" id="menu_equipos">
+                            <a class="nav-link" id="menu_equipos" style="cursor: pointer">
                                 <i class="fas fa-desktop">
                                 </i>
                                 <span>
@@ -63,7 +63,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="charts.html" style="cursor: pointer">
                                 <i class="fas fa-file-contract">
                                 </i>
                                 <span>
@@ -78,7 +78,7 @@
                         ?>
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item">
-                            <a class="nav-link">
+                            <a class="nav-link" style="cursor: pointer">
                                 <i class="fas fa-user-check">
                                 </i>
                                 <span>
@@ -93,7 +93,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="charts.html" style="cursor: pointer">
                                 <i class="fas fa-exchange-alt">
                                 </i>
                                 <span>
@@ -108,7 +108,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="charts.html" style="cursor: pointer">
                                 <i class="fas fa-chart-bar">
                                 </i>
                                 <span>
@@ -119,7 +119,7 @@
                         <?php } ?>
                         <!-- Nav Item - Utilities Collapse Menu -->
                         <li class="nav-item">
-                            <a aria-controls="collapseUtilities" aria-expanded="true" class="nav-link collapsed" data-target="#collapseUtilities" data-toggle="collapse" href="#">
+                            <a aria-controls="collapseUtilities" aria-expanded="true" class="nav-link collapsed" data-target="#collapseUtilities" data-toggle="collapse" href="#" style="cursor: pointer">
                                 <i class="fas fa-cog">
                                 </i>
                                 <span>
@@ -184,7 +184,7 @@
                             <div class="topbar-divider d-none d-sm-block">
                             </div>
                             <!-- Nav Item - User Information -->
-                            <li class="nav-item dropdown no-arrow">
+                            <li class="nav-item dropdown no-arrow" style="cursor: pointer">
                                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="userDropdown" role="button">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                         <?php echo $datosusuario[0]["nombres"]; ?>
@@ -247,7 +247,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                            Ready to Leave?
+                            Desea cerrar sesión?
                         </h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">
@@ -255,19 +255,27 @@
                             </span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        Select "Logout" below if you are ready to end your current session.
+                    <div class="modal-body text-center">
+                        Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-dismiss="modal" type="button">
-                            Cancel
+                            Cancelar
                         </button>
-                        <a class="btn btn-primary" href="login.html">
-                            Logout
+                        <a class="btn btn-primary" href="../index.php">
+                            Cerrar sesión
                         </a>
                     </div>
                 </div>
             </div>
         </div>
   <?php include 'footer.php';?>
+  <?php 
+        function Salir()
+        {
+            @session_start();
+            session_destroy();
+            header("Location: vista/login/index.php");
+        }
 
+   ?>

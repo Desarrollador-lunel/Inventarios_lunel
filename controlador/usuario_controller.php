@@ -63,9 +63,9 @@ function getTablaUsuario($permisos)
             if (isset($listaUsuario)) {
             for ($i = 0; $i < sizeof($listaUsuario); $i++) {
                 echo '<tr>';
-                echo '<td class="text-center">' . $listaUsuario[$i]["nombres"] . '</td>';
-                echo '<td class="text-center">' . $listaUsuario[$i]["nombre_cargo"] . '</td>';
-                echo '<td class="text-center">' . $listaUsuario[$i]["nombre_usuario"] . '</td>';
+                echo '<td class="text-center" style="cursor: pointer">' . $listaUsuario[$i]["nombres"] . '</td>';
+                echo '<td class="text-center" style="cursor: pointer">' . $listaUsuario[$i]["nombre_cargo"] . '</td>';
+                echo '<td class="text-center" style="cursor: pointer">' . $listaUsuario[$i]["nombre_usuario"] . '</td>';
                 if ($permisos[0]["editar"]==1){
                 echo '<td class="text-center"><button type="button" class="btn btn-warning text-center" data-target="#modalUsuario" data-toggle="modal" name="btn_editar_usuario" data-id-Usuario="' . $listaUsuario[$i]["id_usuario"] . '"><i class="fas fa-pen-square"></i></button></td>';
                 }  

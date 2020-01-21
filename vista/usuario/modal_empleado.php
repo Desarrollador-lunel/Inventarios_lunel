@@ -16,17 +16,26 @@
             <div class="col-sm-7">
               <input class="form-control" type="text" id="nombre_empleado" style="text-transform:uppercase;">
             </div>
+            <div class="col-sm-2 text-danger">
+              *
+            </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Apellido:</label>
             <div class="col-sm-7">
               <input class="form-control" type="text" id="apellido_empleado" style="text-transform:uppercase;">
             </div>
+            <div class="col-sm-2 text-danger">
+              *
+            </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Cédula:</label>
             <div class="col-sm-7">
               <input class="form-control" type="text" id="cedula_empleado" style="text-transform:uppercase;">
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
@@ -46,6 +55,9 @@
             <div class="col-sm-7">
               <input class="form-control" type="text" id="email_empleado" style="text-transform:uppercase;">
             </div>
+            <div class="col-sm-2 text-danger">
+              *
+            </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Cargo:</label>
@@ -53,6 +65,9 @@
               <select class="form-control" id="fkID_cargo" >
                 <?php getSelectCargo();?>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
@@ -72,6 +87,9 @@
               <select class="form-control" id="fkID_territorial">
                 <option selected value="0">N/A</option>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
