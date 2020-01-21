@@ -1,9 +1,10 @@
 <?php include 'head.php';
       session_start();
+      include dirname(__file__, 2) . '../modelo/usuario.php';
+      $usuario = new Usuario();
       $idUsuario = $_SESSION['id_usuario'];
-
-
-
+      $datosusuario = $usuario->getUsuariolog($idUsuario);
+      $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],1);
 ?>
     <body id="page-top">
         <!-- Page Wrapper -->
@@ -41,6 +42,10 @@
                         <div class="sidebar-heading">
                             Menú
                         </div>
+                        <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],2);
+                               if ($vermodulo[0]['ver']==1) {
+                        ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
                             <a class="nav-link" id="menu_equipos">
@@ -51,16 +56,26 @@
                                 </span>
                             </a>
                         </li>
+                        <?php } ?>
+                        <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],3);
+                               if ($vermodulo[0]['ver']==1) {
+                        ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
                             <a class="nav-link" href="charts.html">
                                 <i class="fas fa-file-contract">
                                 </i>
                                 <span>
-                                    Proyectos
+                                    Proyectos 
                                 </span>
                             </a>
                         </li>
+                        <?php } ?>
+                        <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],4);
+                               if ($vermodulo[0]['ver']==1) {
+                        ?>
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item">
                             <a class="nav-link">
@@ -71,6 +86,11 @@
                                 </span>
                             </a>
                         </li>
+                        <?php } ?>
+                        <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],8);
+                               if ($vermodulo[0]['ver']==1) {
+                        ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
                             <a class="nav-link" href="charts.html">
@@ -81,6 +101,11 @@
                                 </span>
                             </a>
                         </li>
+                        <?php } ?>
+                        <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],12);
+                               if ($vermodulo[0]['ver']==1) {
+                        ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
                             <a class="nav-link" href="charts.html">
@@ -91,6 +116,7 @@
                                 </span>
                             </a>
                         </li>
+                        <?php } ?>
                         <!-- Nav Item - Utilities Collapse Menu -->
                         <li class="nav-item">
                             <a aria-controls="collapseUtilities" aria-expanded="true" class="nav-link collapsed" data-target="#collapseUtilities" data-toggle="collapse" href="#">
@@ -105,12 +131,23 @@
                                     <h6 class="collapse-header">
                                         Personal:
                                     </h6>
+                                    <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],13);
+                               if ($vermodulo[0]['ver']==1) {
+                                 ?>
                                     <a class="collapse-item" href="utilities-color.html">
                                         Empleado
                                     </a>
+                                <?php } ?>
+                                <?php 
+                               $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],14);
+                               if ($vermodulo[0]['ver']==1) {
+                                 ?>
+
                                     <a class="collapse-item" href="utilities-animation.html">
                                         Funcionario
                                     </a>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </li>
@@ -150,23 +187,28 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="userDropdown" role="button">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                        <?php echo $idUsuario; ?>
+                                        <?php echo $datosusuario[0]["nombres"]; ?>
                                     </span>
-                                    <img class="img-profile rounded-circle" src="https://cdn.icon-icons.com/icons2/1248/PNG/128/user_84308.png">
+                                    <img class="img-profile rounded-circle" src="../imagenes/usuario.png">
                                     </img>
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
-                                    <a class="dropdown-item" id="menu_usuarios">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400">
-                                        </i>
-                                        Usuario
-                                    </a>
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400">
                                         </i>
-                                        Roles
+                                        <?php echo $datosusuario[0]["nombre_cargo"]; ?>
                                     </a>
+                                    <?php 
+                                        $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],1);
+                                        if ($vermodulo[0]['ver']==1) {
+                                     ?>
+                                    <a class="dropdown-item" id="menu_usuarios">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400">
+                                        </i>
+                                        Usuarios
+                                    </a>
+                                    <?php } ?>
                                     <div class="dropdown-divider">
                                     </div>
                                     <a class="dropdown-item" data-target="#logoutModal" data-toggle="modal" href="#">

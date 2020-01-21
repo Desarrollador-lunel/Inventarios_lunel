@@ -28,6 +28,45 @@ class Usuario
         return $data;
     }
 
+    //Trae todos los permisos
+    public function getPermisos($id_usuario,$id_modulo)
+    {
+        $query  = "select permisos.* FROM `permisos`
+                    INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo
+                    INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
+                    WHERE usuario.id_usuario='" . $id_usuario . "' and fkID_modulo ='" . $id_modulo . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae la información del usuario logeado 
+    public function getUsuariolog($id_usuario)
+    {
+        $query  = "select usuario.*,CONCAT(nombres_persona, ' ', apellidos_persona) as nombres,fkID_cargo,nombre_cargo FROM `usuario`
+            INNER JOIN persona on persona.id_persona = usuario.fkID_persona
+            INNER JOIN cargo on cargo.id_cargo = persona.fkID_cargo
+            WHERE id_usuario = '" . $id_usuario . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae la información de ver modulo 
+    public function getVermodulo($id_cargo,$id_modulo)
+    {
+        $query  = "select ver FROM `permisos` WHERE fkId_cargo='" . $id_cargo . "' and fkID_modulo='" . $id_modulo . "'" ;
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
     //Traer un usuario registrados
     public function consultaUsuario($data)
     {

@@ -325,8 +325,4 @@
             }
         );
     });
-
-    $("#menu_inicio").click(function(){
-        $('#tabla').load('equipos/index.php');
-    });
 </script>

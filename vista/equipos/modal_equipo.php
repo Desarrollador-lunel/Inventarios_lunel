@@ -13,46 +13,65 @@
           <input type="hidden" id="id_equipo">
           <div class="form-group row">
             <label for="serial_equipo" class="col-sm-3 col-form-label">Serial:</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="serial_equipo" required="true">
+            <div class="col-sm-7">
+              <input type="text" class="form-control" id="serial_equipo" required="true" style="text-transform:uppercase;">
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Tipo de equipo:</label>
-            <div class="col-sm-9">
-              <select class="form-control" id="fkID_tipo_equipo">
+            <div class="col-sm-7">
+              <select class="form-control" id="fkID_tipo_equipo" required="true">
                 <?php $equipo->getSelectTipoEquipo(0);?>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
+              <button type="button" class="btn btn-primary" data-target="#modalTipoEquipo" data-toggle="modal"><i class="fas fa-plus"></i></button>
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Modelo:</label>
-            <div class="col-sm-9">
-              <select class="form-control" id="fkID_modelo">
+            <div class="col-sm-7">
+              <select class="form-control" id="fkID_modelo" required="true">
                 <?php $equipo->getSelectModelo(0);?>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
+              <button type="button" class="btn btn-primary" data-target="#modalModelo" data-toggle="modal"><i class="fas fa-plus"></i></button>
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Marca:</label>
-            <div class="col-sm-9">
-              <select class="form-control" id="fkID_marca">
+            <div class="col-sm-7">
+              <select class="form-control" id="fkID_marca" required="true">
                 <?php $equipo->getSelectMarca(0);?>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
+              <button type="button" class="btn btn-primary" data-target="#modalMarca" data-toggle="modal"><i class="fas fa-plus"></i></button>
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Procesador:</label>
-            <div class="col-sm-9">
-              <select class="form-control" id="fkID_procesador">
+            <div class="col-sm-7">
+              <select class="form-control" id="fkID_procesador" required="true">
                 <?php $equipo->getSelectProcesador(0);?>
               </select>
+            </div>
+            <div class="col-sm-2 text-danger">
+              *
+              <button type="button" class="btn btn-primary" data-target="#modalProcesador" data-toggle="modal"><i class="fas fa-plus"></i></button>
             </div>
           </div>
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Observaciones:</label>
-            <div class="col-sm-9">
-              <textarea class="form-control" id="observaciones_equipo" rows="3"></textarea>
+            <div class="col-sm-7">
+              <textarea class="form-control" id="observaciones_equipo" rows="3" style="text-transform:uppercase;"></textarea>
             </div>
           </div>
           <div class="form-group row">

@@ -1,6 +1,7 @@
 <?php
 include dirname(__file__, 2) . '../modelo/usuario.php';
 $usuario = new Usuario();
+ini_set("session.cookie_lifetime","36000 * 24");
 
 //Request: creacion de nuevo usuario
 if (isset($_POST['create'])) {
@@ -45,6 +46,7 @@ if (isset($_POST['Ingresar'])) {
             $datosUsuario = $usuario->getUserById($_POST['username']);
             session_start(); //Registra la sesion
             $_SESSION['id_usuario'] = $datosUsuario[0]["id_usuario"];
+            //setcookie('id', $datosUsuario[0]["id_usuario"], time() + 365 * 24 * 60 * 60);
             header('location: ../vista/index.php');
         } else {
             header('location: ../vista/login/index.php?pass=false');
@@ -54,7 +56,7 @@ if (isset($_POST['Ingresar'])) {
     }
 }
 
-function getTablaUsuario()
+function getTablaUsuario($permisos)
 {
     $usuario = new Usuario();
             $listaUsuario = $usuario->getUsuario();
@@ -64,8 +66,12 @@ function getTablaUsuario()
                 echo '<td class="text-center">' . $listaUsuario[$i]["nombres"] . '</td>';
                 echo '<td class="text-center">' . $listaUsuario[$i]["nombre_cargo"] . '</td>';
                 echo '<td class="text-center">' . $listaUsuario[$i]["nombre_usuario"] . '</td>';
+                if ($permisos[0]["editar"]==1){
                 echo '<td class="text-center"><button type="button" class="btn btn-warning text-center" data-target="#modalUsuario" data-toggle="modal" name="btn_editar_usuario" data-id-Usuario="' . $listaUsuario[$i]["id_usuario"] . '"><i class="fas fa-pen-square"></i></button></td>';
+                }  
+                if ($permisos[0]["eliminar"]==1){ 
                  echo '<td class="text-center"> <button type="button" class="btn btn-danger" name="btn_eliminar_usuario" data-id-usuario="' .$listaUsuario[$i]["id_usuario"] . '" data-toggle="modal" data-target="#eliminarModal"><i class="fas fa-trash-alt"></i></button></td>';
+                }
                 echo '</tr>';
             }
         } else {
