@@ -141,7 +141,7 @@ class Usuario
     }
 
     //Trae los proyectos
-    public function getProyecto()
+    public function getProyecto($data)
     {
         $query  = "select * FROM `proyecto` WHERE estado=1";
         $result = mysqli_query($this->link, $query);
@@ -158,6 +158,16 @@ class Usuario
                     INNER join territorial on id_territorial=fkID_territorial
                     INNER JOIN proyecto on id_proyecto=fkID_proyecto
                     WHERE territorial_proyecto.estado=1 and id_proyecto= '" . $data['id_territorial'] . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    public function getBuscar_usuario($data)
+    {
+        $query  = "select COUNT(*) as conteo FROM `usuario` WHERE estado=1 and fkID_persona= '" . $data['id_usuario'] . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));

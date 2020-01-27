@@ -60,6 +60,7 @@ function getTablaUsuario($permisos)
 {
     $usuario = new Usuario();
             $listaUsuario = $usuario->getUsuario();
+            if ($permisos[0]["consultar"]==1) {
             if (isset($listaUsuario)) {
             for ($i = 0; $i < sizeof($listaUsuario); $i++) {
                 echo '<tr>';
@@ -77,6 +78,11 @@ function getTablaUsuario($permisos)
         } else {
             echo '<tr>';
             echo '<td colspan="9">No existen usuarios</td>';
+            echo '</tr>';
+        }
+        } else {
+            echo '<tr>';
+            echo '<td colspan="9">No tienen permisos para consultar</td>';
             echo '</tr>';
         }
                     
@@ -111,7 +117,7 @@ function getSelectProyecto()
         $listaProyecto = $usuario->getProyecto();
         //Se recorre array de nivel 1
         if (isset($listaProyecto)) {
-            echo '<option selected value="0">N/A</option>';
+            echo '<option selected value="0">Seleccione</option>';
             for ($i = 0; $i < sizeof($listaProyecto); $i++) {
                 //Valida si es el valor
                 if ($valor == $listaProyecto[$i]["id_proyecto"]) {

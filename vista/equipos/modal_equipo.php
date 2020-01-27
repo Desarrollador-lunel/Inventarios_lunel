@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalEquipoLabel">Crear equipo</h5>
+        <h5 class="modal-title" id="modalEquipoLabel"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -77,6 +77,9 @@
           <div class="form-group row">
             <div class="col-sm-12 text-center">
               <button data-accion="crear" type="button" class="btn btn-success" id="btn_guardar_equipo">Guardar</button>
+              <div class="progress" id="btn_guardando">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Guardando...</div>
+              </div>
             </div>
           </div>
         </form>
@@ -96,9 +99,13 @@
       </div>
       <div class="modal-body">
         ¿Realmente desea eliminar el registro?
+        <div class="progress" id="btn_eliminando">
+          <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Eliminando...
+          </div>
+        </div>
       </div>
       <div class="modal-footer text-center">
-        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" id="btn_cancelar">Cancelar</button>
         <button type="button" class="btn btn-danger" id="btn_eliminar_equipo" name="btn_eliminar_equipo">Eliminar</button>
       </div>
     </div>

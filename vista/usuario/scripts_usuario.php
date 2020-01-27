@@ -8,6 +8,7 @@
 		$("#nombre_usuario").attr('disabled', 'disabled');
 		$("#pass_usuario").attr('disabled', 'disabled');
 		$("#nombre_cargo").prop('disabled', true);
+		$("#btn_guardando").hide();
 	});
 
 	//Funcion abrir formulario de empleado
@@ -48,6 +49,8 @@
 	      url:  "../controlador/ajaxUsuario.php",
 	      data: 'nombre_usuario='+ nombre_usuario + '&pass_usuario='+ pass_usuario + '&fkID_persona='+ fkID_persona + '&tipo=inserta',
 	    success:function(r){
+	    	$("#btn_guardar_Usuario").hide();
+          	$("#btn_guardando").show();
 			alertify.success('Creado correctamente');
 		  	setTimeout('cargar_sitio()',1000);
 		}
@@ -63,6 +66,7 @@
 		$("#nombre_cargo").prop('disabled', true);
 		carga_Usuario(id_Usuario);
 		$("#btn_guardar_Usuario").attr("data-accion","editar");
+		$("#btn_guardando").hide();
 	})
 
 	//Carga el Usuario por el ID
@@ -221,6 +225,27 @@
 	    })
 	};
 
+	//Carga territoriales del proyecto
+	function cargar_proyectos(){
+	    $.ajax({
+	        url: "../controlador/ajaxUsuario.php",
+	        data: "tipo=consultaproyectos",
+	        dataType: 'json' 
+	    })
+	    .done(function(data) {
+	        $.each(data, function (key, value) {
+	        	console.log("holaa goku")
+                $("#fkID_proyecto").append("<option value=" + value.id_proyecto + ">" + value.nombre_proyecto + "</option>");
+            }); 
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    })
+	};
+
 
 	//Funcion eliminar Usuario
 	$("[name*='btn_eliminar_usuario']").click(function(){
@@ -252,6 +277,7 @@
 
 	//validar el select de personas
 	$("#fkID_persona").change(function(){
+			validar_usuario();
             console.log("si entra")
             fkID_persona = $("#fkID_persona").val();
             console.log(fkID_persona)
@@ -271,11 +297,51 @@
             fkID_cargo = $("#fkID_cargo").val();
             console.log(fkID_cargo);
             if (fkID_cargo < 2 ) {
-        		$("#fkID_proyecto").attr('disabled', 'disabled');
+            	op = $("#fkID_proyecto").length;
+            	$("#fkID_proyecto").empty()
+        		$("#fkID_proyecto").attr('disabled', false);
+        		$("#fkID_proyecto").append("<option value='0'>Seleccione..</option>");
+        		$("#fkID_proyecto").append("<option value='1'>PROYECTO LUNEL-IE</option>");
             } else {
+            	$("#fkID_proyecto").empty()
+            	$("#fkID_proyecto").append("<option value='0'>Seleccione</option>");
+            	cargar_proyectos();
         		$("#fkID_proyecto").prop('disabled', false);
             }
         });
+
+	//validar el select de usuario
+	function validar_usuario(argument) {
+		console.log("si entree")
+		fkID_persona = $("#fkID_persona").val();
+		console.log(fkID_persona)
+            if (fkID_persona != 0 ) {
+            	console.log("goku")
+            $.ajax({
+	      		url: "../controlador/ajaxUsuario.php",
+	      		data: 'id_usuario='+fkID_persona+ '&tipo=buscar_usuario',
+	      		dataType: 'json'
+			})
+			.done(function(data) {
+				console.log(data[0]["conteo"]);
+				console.log("si")
+				if (data[0]["conteo"]=="1") {
+					alert('Usuario ya fue creado');
+					$("#nombre_usuario").val('');
+	 				$("#pass_usuario").val('');
+	 				$("#nombre_cargo").val('');
+	 				$("#fkID_persona").val('');
+	 				$("#fkID_persona").append("<option value='0'>Seleccione..</option>");
+					}
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    });
+        }
+	}
 
 	//validar el select de proyecto
 	$("#fkID_proyecto").change(function(){
@@ -293,20 +359,32 @@
 
 	//Campos incompletos de usuario
 	function validar_campos(){
-		var respuesta = true;
-		if($("#nombre_cargo").val().length == 0){
-			respuesta = false;
-		}
-		if($('#fkID_persona').val().trim() == 0){
-			respuesta = false;
-		}
-		if($("#nombre_usuario").val().length == 0){
-			respuesta = false;
-		}
-		if($("#pass_usuario").val().length == 0){
-			respuesta = false;
-		}
-		if(respuesta == false){
+		var bandera = true;
+      if($("#nombre_cargo").val() == 0){
+        bandera = false;
+        marcar_campos("#nombre_cargo", 'incorrecto');
+      } else {
+        marcar_campos("#nombre_cargo", 'correcto');
+      }
+      if($("#fkID_persona").val() == 0){
+        bandera = false;
+        marcar_campos("#fkID_persona", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_persona", 'correcto');
+      }
+      if($("#nombre_usuario").val() == 0){
+        bandera = false;
+        marcar_campos("#nombre_usuario", 'incorrecto');
+      } else {
+        marcar_campos("#nombre_usuario", 'correcto');
+      }
+      if($("#pass_usuario").val() == 0){
+        bandera = false;
+        marcar_campos("#pass_usuario", 'incorrecto');
+      } else {
+        marcar_campos("#pass_usuario", 'correcto');
+      }
+		if(bandera == false){
 			alert('Complete el formulario');
 			return false;
 		} else {
@@ -316,35 +394,68 @@
 
 	//Campos incompletos de empleado
 	function validar_campos_empleado(){
-		var respuesta = true;
-		if($("#nombre_empleado").val().length == 0){
-			respuesta = false;
-		}
-		if($('#fkID_cargo').val().trim() == 0){
-			respuesta = false;
-		}
-		if($("#apellido_empleado").val().length == 0){
-			respuesta = false;
-		}
-		if($("#cedula_empleado").val().length == 0){
-			respuesta = false;
-		}
-		if($("#email_empleado").val().length == 0){
-			respuesta = false;
-		}
-		if($('#fkID_proyecto').val().trim() == 0){
-			respuesta = false;
-		}
-		if($('#fkID_territorial').val().trim() == 0){
-			respuesta = false;
-		}
-		if(respuesta == false){
+		var bandera = true;
+      if($("#nombre_empleado").val().length == 0){
+        bandera = false;
+        marcar_campos("#nombre_empleado", 'incorrecto');
+      } else {
+        marcar_campos("#nombre_empleado", 'correcto');
+      }
+      if($("#fkID_cargo").val() == 0){
+        bandera = false;
+        marcar_campos("#fkID_cargo", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_cargo", 'correcto');
+      }
+      if($("#apellido_empleado").val().length == 0){
+        bandera = false;
+        marcar_campos("#apellido_empleado", 'incorrecto');
+      } else {
+        marcar_campos("#apellido_empleado", 'correcto');
+      }
+      if($("#cedula_empleado").val().length == 0){
+        bandera = false;
+        marcar_campos("#cedula_empleado", 'incorrecto');
+      } else {
+        marcar_campos("#cedula_empleado", 'correcto');
+      }
+      if($("#email_empleado").val().length == 0){
+        bandera = false;
+        marcar_campos("#email_empleado", 'incorrecto');
+      } else {
+        marcar_campos("#email_empleado", 'correcto');
+      }
+      if($("#fkID_proyecto").val() == 0){
+        bandera = false;
+        marcar_campos("#fkID_proyecto", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_proyecto", 'correcto');
+      }
+      if($("#fkID_territorial").val() == 0){
+        bandera = false;
+        marcar_campos("#fkID_territorial", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_territorial", 'correcto');
+      }
+		if(bandera == false){
 			alert('Complete el formulario');
 			return false;
 		} else {
 			return true;
 		}
 	}
+
+	//Funcion para marcar los campos
+  function marcar_campos(campo, tipo){
+    if(tipo == 'correcto'){
+      $(campo).removeClass('is-invalid');
+      $(campo).addClass('is-valid');
+    }
+    if(tipo == 'incorrecto'){
+      $(campo).removeClass('is-valid');
+      $(campo).addClass('is-invalid');
+    }
+  }
 
 	//Funcion para el Datatable
     $(document).ready(function () {
@@ -385,4 +496,16 @@
   		$('.modal-backdrop').remove();//eliminamos el backdrop del modal
   		$('#tabla').load('usuario/Vusuario.php');
     }
+
+    function validarEmail( email ) {
+	    expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	    if ( !expr.test(email) ){
+	    	alert("Error: La dirección de correo " + email + " es incorrecta.");
+	    	$("#email").val("");
+	    }else{
+	    	return true;
+	    }	    
+	}
+
+
 </script>

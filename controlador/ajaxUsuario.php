@@ -57,6 +57,15 @@ if ($tipo == 'consultaterritorial') {
     }
 };
 
+if ($tipo == 'consultaproyectos') {
+    $resultado = $usuario->getProyecto($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
+    }
+};
+
 if ($tipo == 'edita') {
     if ($usuario->editaUsuario($_GET)) {
         echo $r='1';
@@ -70,5 +79,14 @@ if ($tipo == 'elimina_logico') {
         return '1';
     } else {
         return '0';
+    }
+};
+
+if ($tipo == 'buscar_usuario') {
+    $resultado = $usuario->getBuscar_usuario($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
     }
 };

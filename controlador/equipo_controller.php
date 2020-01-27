@@ -105,6 +105,7 @@ class equipoController extends equipo
         //Lista del menu Nivel 1
         $listaEquipos = $equipo->getEquipos();
         //Se recorre array de nivel 1
+        if ($permisos[0]["consultar"]==1) {
         if (isset($listaEquipos)) {
             for ($i = 0; $i < sizeof($listaEquipos); $i++) {
                 echo '<tr>';
@@ -131,6 +132,11 @@ class equipoController extends equipo
         } else {
             echo '<tr>';
             echo '<td colspan="9">No existen equipos</td>';
+            echo '</tr>';
+        }
+        } else {
+            echo '<tr>';
+            echo '<td colspan="9">No tienen permisos para consultar</td>';
             echo '</tr>';
         }
     }

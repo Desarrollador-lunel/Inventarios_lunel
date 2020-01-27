@@ -6,7 +6,7 @@
       $datosusuario = $usuario->getUsuariolog($idUsuario);
       $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],1);
 ?>
-    <body id="page-top">
+    <body id="page-top">  
         <!-- Page Wrapper -->
         <div id="wrapper">
             <!-- Sidebar -->
@@ -108,7 +108,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" href="charts.html" style="cursor: pointer">
+                            <a class="nav-link" id="menu_informes" style="cursor: pointer">
                                 <i class="fas fa-chart-bar">
                                 </i>
                                 <span>
@@ -135,7 +135,7 @@
                                $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],13);
                                if ($vermodulo[0]['ver']==1) {
                                  ?>
-                                    <a class="collapse-item" href="utilities-color.html">
+                                    <a class="collapse-item" href="utilities-color.html" style="cursor: pointer">
                                         Empleado
                                     </a>
                                 <?php } ?>
@@ -144,7 +144,7 @@
                                if ($vermodulo[0]['ver']==1) {
                                  ?>
 
-                                    <a class="collapse-item" href="utilities-animation.html">
+                                    <a class="collapse-item" id="menu_funcionario" style="cursor: pointer">
                                         Funcionario
                                     </a>
                                     <?php } ?>

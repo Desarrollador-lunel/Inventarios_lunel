@@ -28,5 +28,13 @@
         $('#tabla').load('equipos/index.php');
     });
 
+    $("#menu_funcionario").click(function(){
+        $('#tabla').load('funcionarios/index.php');
+    });
+
+    $("#menu_informes").click(function(){
+        $('#tabla').load('informes/inventario_total.php');
+    });
+
 
 </script>

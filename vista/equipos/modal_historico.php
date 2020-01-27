@@ -58,7 +58,7 @@ echo date('Y-m-d H:i:s');
         Serial: <?php echo $datosEquipo[0]["serial_equipo"]; ?><br>
         Tipo de equipo: <?php echo $datosEquipo[0]["nombre_tipo_equipo"]; ?><br>
         Modelo: <?php echo $datosEquipo[0]["nombre_modelo"]; ?><br>
-        Marca: <?php echo $datosEquipo[0]["nombre_marca"]; ?>
+        Marca: <?php echo $datosEquipo[0]["nombre_marca"]; ?><br>
         Procesador: <?php echo $datosEquipo[0]["nombre_procesador"]; ?><br>
         Estado: <?php echo $datosEquipo[0]["nombre_estado_equipo"]; ?><br>
         Observaciones: <?php echo $datosEquipo[0]["observaciones_equipo"]; ?><br>

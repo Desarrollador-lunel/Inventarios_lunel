@@ -36,6 +36,8 @@
 		$("#modalEquipoLabel").text("Crear equipo");
 		$("#btn_guardar_equipo").attr("data-accion","crear");
 		$("#form_equipo")[0].reset();
+		$("#btn_guardando").hide();
+		limpiar_campos();
 	});
 
 	//Funcion guardar equipo
@@ -142,24 +144,55 @@
 		var bandera = true;
 		if($("#serial_equipo").val().length == 0){
 			bandera = false;
+			marcar_campos("#serial_equipo", 'incorrecto');
+		} else {
+			marcar_campos("#serial_equipo", 'correcto');
 		}
 		if($('#fkID_tipo_equipo').val().trim() == 0){
 			bandera = false;
+			marcar_campos("#fkID_tipo_equipo", 'incorrecto');
+		}  else {
+			marcar_campos("#fkID_tipo_equipo", 'correcto');
 		}
 		if($('#fkID_modelo').val().trim() == 0){
 			bandera = false;
+			marcar_campos("#fkID_modelo", 'incorrecto');
+		} else {
+			marcar_campos("#fkID_modelo", 'correcto');
 		}
 		if($('#fkID_marca').val().trim() == 0){
 			bandera = false;
+			marcar_campos("#fkID_marca", 'incorrecto');
+		} else {
+			marcar_campos("#fkID_marca", 'correcto');
 		}
 		if($('#fkID_procesador').val().trim() == 0){
 			bandera = false;
+			marcar_campos("#fkID_procesador", 'incorrecto');
+		} else {
+			marcar_campos("#fkID_procesador", 'correcto');
 		}
 		if(bandera == false){
-			alert('Complete el formulario');
+			alertify.alert(
+				'Campos incompletos',
+				'Los campos con * son obligatorios',
+				function(){
+					alertify.error('Campos vacios');
+			});
 			return false;
 		} else {
 			return true;
+		}
+	}
+
+	function marcar_campos(campo, tipo){
+		if(tipo == 'correcto'){
+			$(campo).removeClass('is-invalid');
+			$(campo).addClass('is-valid');
+		}
+		if(tipo == 'incorrecto'){
+			$(campo).removeClass('is-valid');
+			$(campo).addClass('is-invalid');
 		}
 	}
 
@@ -228,6 +261,8 @@
 	    })
 	    .done(function(data) {
 	      //---------------------
+	      $("#btn_guardar_equipo").hide();
+	      $("#btn_guardando").show();
 	      alertify.success('Creado correctamente');
 		  setTimeout('cargar_sitio()',1000);
 	    })
@@ -239,14 +274,8 @@
 	    });
 	}
 
-	//Funcion guardar equipo
-	$("[name*='btn_editar']").click(function(){
-		id_equipo = $(this).attr('data-id-equipo');
-		console.log('Entro a editar equipo');
-		$("#modalEquipoLabel").text("Editar equipo");
-		carga_equipo(id_equipo);
-		$("#btn_guardar_equipo").attr("data-accion","editar");
-	});
+	//Carga eventos
+	carga_eventos();
 
 	//Carga el equipo por el ID
 	function carga_equipo(id_equipo){
@@ -263,6 +292,9 @@
 	        $.each(data[0], function( key, value ) {
 	          console.log(key+"--"+value);
 	          $("#"+key).val(value);
+	          if(key == 'fkID_procesador' && value == 7){
+	          	$('#fkID_procesador').attr('disabled',true);
+	          }
 	        });
 
 	        id_equipo = data.id_equipo;
@@ -291,7 +323,8 @@
 	    })
 	    .done(function(data) {
 	      //---------------------
-	      console.log(data);
+	      $("#btn_guardar_equipo").hide();
+	      $("#btn_guardando").show();
 	      alertify.success('Editado correctamente');
 		  setTimeout('cargar_sitio()',1000);
 	    })
@@ -303,18 +336,6 @@
 	    });
 	}
 
-	//Funcion eliminar equipo
-	$("[name*='btn_eliminar']").click(function(){
-		id_equipo = $(this).attr('data-id-equipo');
-		$("#btn_eliminar_equipo").attr("data-id-equipo",id_equipo);
-	});
-
-	//Funcion eliminar equipo
-	$("[name*='btn_eliminar_equipo']").click(function(){
-		id_equipo = $(this).attr('data-id-equipo');
-		elimina_equipo(id_equipo);
-	});
-
 	//Funcion para eliminar el equipo
 	function elimina_equipo(id_equipo){
 	    $.ajax({
@@ -323,7 +344,9 @@
 	    })
 	    .done(function(data) {
 	      //---------------------
-	      console.log(data);
+	      $("#btn_eliminar_equipo").hide();
+	      $("#btn_cancelar").hide();
+	      $("#btn_eliminando").show();
 	      alertify.success('Eliminado correctamente');
 		  setTimeout('cargar_sitio()',1000);
 	    })
@@ -637,4 +660,57 @@
   		$('.modal-backdrop').remove();//eliminamos el backdrop del modal
   		$('#tabla').load('equipos/index.php');
     }
+
+	//Funcion para pasar eventos
+    $(".paginate_button").click(function(){
+        carga_eventos();
+    });
+
+	//Funcion para pasar eventos
+    $("[type*='search']").keypress(function(){
+        carga_eventos();
+    });
+
+	//Funcion editar
+	function evento_editar(){
+		$("[name*='btn_editar']").click(function(){
+			id_equipo = $(this).attr('data-id-equipo');
+			console.log('Entro a editar equipo');
+			$("#modalEquipoLabel").text("Editar equipo");
+			carga_equipo(id_equipo);
+			$("#btn_guardar_equipo").attr("data-accion","editar");
+			$("#btn_guardando").hide();
+			limpiar_campos();
+		});
+	}
+
+	//Funcion eliminar
+	function evento_eliminar(){
+		//Funcion eliminar equipo
+		$("[name*='btn_eliminar']").click(function(){
+			$("#btn_eliminando").hide();
+			id_equipo = $(this).attr('data-id-equipo');
+			$("#btn_eliminar_equipo").attr("data-id-equipo",id_equipo);
+		});
+
+		//Funcion eliminar equipo
+		$("[name*='btn_eliminar_equipo']").click(function(){
+			id_equipo = $(this).attr('data-id-equipo');
+			elimina_equipo(id_equipo);
+		});
+	}
+
+	//Funcion para pasar eventos
+	function carga_eventos(){
+		evento_editar();
+		evento_eliminar();
+	}
+
+	//Funcion para limpiar campos
+	function limpiar_campos(){
+		$("input").removeClass('is-invalid');
+		$("input").removeClass('is-valid');
+		$("select").removeClass('is-invalid');
+		$("select").removeClass('is-valid');
+	}
 </script>
