@@ -1,7 +1,8 @@
-<?php include "../../controlador/usuario_controller.php";
+ <?php include "../../controlador/usuario_controller.php";
     session_start();
     $idUsuario = $_SESSION['id_usuario'];
     $permisos = $usuario->getPermisos($idUsuario,1);
+    $permisoconsulta = $usuario->getPermisosconsulta($idUsuario);
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -52,7 +53,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php getTablaUsuario($permisos);?>
+                <?php getTablaUsuario($permisos,$permisoconsulta);?>
             </tbody>
         </table>
     </div>

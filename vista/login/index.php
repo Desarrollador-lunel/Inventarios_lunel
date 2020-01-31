@@ -71,7 +71,7 @@ $usuario = new Usuario();
 
     <!-- Remind Passowrd -->
     <div id="formFooter">
-      <a class="underlineHover" href="#">¿Olvido su contraseña?</a>
+      <a class="underlineHover" href="../usuario/recupera.php">¿Olvido su contraseña?</a>
     </div>
 
   </div>

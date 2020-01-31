@@ -56,10 +56,10 @@ if (isset($_POST['Ingresar'])) {
     }
 }
 
-function getTablaUsuario($permisos)
+function getTablaUsuario($permisos,$permisoconsulta)
 {
     $usuario = new Usuario();
-            $listaUsuario = $usuario->getUsuario();
+            $listaUsuario = $usuario->getUsuario($permisoconsulta);
             if ($permisos[0]["consultar"]==1) {
             if (isset($listaUsuario)) {
             for ($i = 0; $i < sizeof($listaUsuario); $i++) {

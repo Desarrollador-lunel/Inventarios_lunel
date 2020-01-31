@@ -1,5 +1,13 @@
 <?php include 'head.php';
-      session_start();
+        if(!isset($_SESSION)) 
+        { 
+            session_start(); 
+        }
+        if($_SESSION['id_usuario']<1)
+        {
+            header("Location: login/index.php");
+            exit;
+        }
       include dirname(__file__, 2) . '../modelo/usuario.php';
       $usuario = new Usuario();
       $idUsuario = $_SESSION['id_usuario'];
@@ -63,7 +71,7 @@
                         ?>
                         <!-- Nav Item - Charts -->
                         <li class="nav-item">
-                            <a class="nav-link" href="charts.html" style="cursor: pointer">
+                            <a class="nav-link" id="menu_proyecto" style="cursor: pointer">
                                 <i class="fas fa-file-contract">
                                 </i>
                                 <span>
@@ -262,20 +270,11 @@
                         <button class="btn btn-secondary" data-dismiss="modal" type="button">
                             Cancelar
                         </button>
-                        <a class="btn btn-primary" href="../index.php">
-                            Cerrar sesión
-                        </a>
+                        <button class="btn btn-primary" name="btn_cerrar_sesion" id="btn_cerrar_sesion">
+                            Cerrar sesión  
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
   <?php include 'footer.php';?>
-  <?php 
-        function Salir()
-        {
-            @session_start();
-            session_destroy();
-            header("Location: vista/login/index.php");
-        }
-
-   ?>

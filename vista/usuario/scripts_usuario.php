@@ -1,5 +1,11 @@
  <script type="text/javascript">
 	var pass_antiguo;
+
+var agregarte = [];
+//agregarte.push(['Study',2]);
+var len = agregarte.length;
+//console.log(agregarte[5][1]); // 9
+console.log(len)
     //Funcion boton crear Usuario
 	$("#btn_crear_usuario").click(function(){
 		$("#modalUsuarioLabel").text("Crear Usuario");
@@ -8,7 +14,15 @@
 		$("#nombre_usuario").attr('disabled', 'disabled');
 		$("#pass_usuario").attr('disabled', 'disabled');
 		$("#nombre_cargo").prop('disabled', true);
+		$("#btnadicionempleado").prop('disabled', false);
 		$("#btn_guardando").hide();
+	});
+
+	//Funcion abrir formulario de empleado
+	$("#btnadicionproyecto").click(function(){
+		$("#form_Proyecto")[0].reset();
+		$("#territorial_agregada").empty();
+        $("#fkID_proyecto").prop('disabled', true);
 	});
 
 	//Funcion abrir formulario de empleado
@@ -26,6 +40,60 @@
 		}
 	});
 
+	//Funcion guardar empleado
+	$("#btn_guardar_Proyecto").click(function(){
+		respuesta = validar_campos_proyecto();
+		if (respuesta) {
+		crea_proyecto();
+		}
+	});
+
+	//Funcion para agregar territoriales a div
+	$("#btn_agregar_Territorial").click(function(){
+		respuesta=validar_campos_territorial();
+		if (respuesta) {
+			direccion = $("#direccion_territorial").val();
+	 		fkID_territorial = $("#fkID_territorial2").val();
+	 		nombre_territorial = $('select[name="fkID_territorial2"] option:selected').text();
+	 		console.log(direccion+" "+fkID_territorial+" "+nombre_territorial);
+	 		agregar_campo(direccion,fkID_territorial,nombre_territorial)
+		} 
+	});
+
+	function agregar_campo(direccion,id,nombre) {
+		camponombre = '<div class="form-group row" id="territorial'+id+'">'+
+			'<div class="col-sm-10" >'+
+              '<label class="form-control " type="text" id="territorial' + id + '"  name="territorial' + id + '">'+nombre+'     '+direccion+'</label>'+
+              '</div>'+
+              '<div class="col-sm-2 text-center">'+
+              '<button data-id-territorial="'+id+'" type="button" class="btn btn-danger"'+
+               'id="btn_eliminar_Territorial'+id+'">X</button>'+
+            '</div></div>';
+		$("#territorial_agregada").append(camponombre);
+		$("#direccion_territorial").val('');
+	 	$("#fkID_territorial2").val('');
+	 	$("#direccion_territorial").removeClass('is-invalid');
+      	$("#direccion_territorial").removeClass('is-valid');
+      	$("#fkID_territorial2").removeClass('is-invalid');
+      	$("#fkID_territorial2").removeClass('is-valid');
+      	console.log("si")
+      	//Funcion eliminar territorial seleccionada
+	$("#btn_eliminar_Territorial"+id).click(function(){ 
+		console.log("chavo")
+		id_territorial = $(this).attr('data-id-territorial');
+		campo = "territorial"+id_territorial
+		$("#"+campo).remove();
+		var len = agregarte.length;
+			for (var i = 0; i < len; i++) {
+		    if (agregarte[i][0]==id) { 
+		    agregarte.splice(i,1);
+		    }
+		}
+	});
+	//crea el arrays de la territorial para agregar
+	agregarte.push([id,direccion]);
+	}
+
 	//Funcion guardar Usuario
 	$("#btn_guardar_Usuario").click(function(){ 
 		respuesta = validar_campos();
@@ -39,6 +107,7 @@
 			}
 		} 
 	});
+
 
 	//Funcion para guardar el Usuario
 	function crea_Usuario(){
@@ -64,9 +133,30 @@
 		$("#modalUsuarioLabel").text("Editar Usuario");
 		$("#fkID_persona").attr('disabled', 'disabled');
 		$("#nombre_cargo").prop('disabled', true);
+		$("#nombre_usuario").prop('disabled', false);
+	 	$("#pass_usuario").prop('disabled', false);
+	 	$("#btnadicionempleado").prop('disabled', true);
 		carga_Usuario(id_Usuario);
 		$("#btn_guardar_Usuario").attr("data-accion","editar");
 		$("#btn_guardando").hide();
+	})
+
+	//Funcion guardar Usuario
+	$("[name*='btn_cerrar_sesion']").click(function(){
+		console.log("hola")
+		$.ajax({
+	        url: "../controlador/ajaxUsuario.php",
+	        data: "tipo=cerrar_sesion",
+	    })
+	    .done(function(data) {
+	    	console.log(data)
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    })
 	})
 
 	//Carga el Usuario por el ID
@@ -144,6 +234,46 @@
 	     always(function(data) {
 	      console.log(data);
 	    });
+	}
+
+	//Funcion para crear proyecto
+	function crea_proyecto(){
+	 	nombre_Proyecto = $("#nombre_Proyecto").val();
+	    $.ajax({
+	      url: "../controlador/ajaxUsuario.php", 
+	      data: 'nombre_proyecto='+nombre_Proyecto+'&tipo=inserta_proyecto',
+	      dataType: 'json'
+	    })
+	    .done(function(data) {
+	      console.log(data[0]["id"]);
+	      agrega_territoriales(data[0]["id"]);
+	    })
+	    .fail(function(data) {
+	      console.log(data);
+	    })
+	     always(function(data) {
+	      console.log(data);
+	    });
+	}
+
+	//Funcion para agrgar territoriales proyecto
+	function agrega_territoriales(fkID_proyecto){
+	 	var len = agregarte.length;
+			for (var i = 0; i < len; i++) {
+		    console.log(agregarte[i][0]);
+		    console.log(agregarte[i][1]);
+		    console.log(fkID_proyecto);
+	    $.ajax({
+	      url: "../controlador/ajaxUsuario.php", 
+	      data: 'fkID_territorial='+agregarte[i][0]+'&direccion_territorial='+agregarte[i][1]+'&fkID_proyecto='+fkID_proyecto+'&tipo=agregar_territorial',
+	      success:function(r){
+			console.log(r);
+		}
+	    })
+	    }
+	    $("#modalProyecto").removeClass("show");
+	    $("#modalProyecto").removeClass("modal-backdrop");
+	    alert('Guardado el proyecto');
 	}
 
 	function carga_empleado(){
@@ -392,6 +522,52 @@
 		}
 	}
 
+	//Campos incompletos de usuario
+	function validar_campos_territorial(){
+		var bandera = true;
+      if($("#direccion_territorial").val() == 0){
+        bandera = false;
+        marcar_campos("#direccion_territorial", 'incorrecto');
+      } else {
+        marcar_campos("#direccion_territorial", 'correcto');
+      }
+      if($("#fkID_territorial2").val() == 0){
+        bandera = false;
+        marcar_campos("#fkID_territorial2", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_territorial2", 'correcto');
+      }
+		if(bandera == false){
+			alert('Complete el formulario');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	//Campos incompletos de proyecto
+	function validar_campos_proyecto(){
+		var bandera = true;
+      if($("#nombre_Proyecto").val() == 0){
+        bandera = false;
+        marcar_campos("#nombre_Proyecto", 'incorrecto');
+      } else {
+        marcar_campos("#nombre_Proyecto", 'correcto');
+      }
+      if($("#territorial_agregada").html()==""){
+        bandera = false;
+        marcar_campos("#fkID_territorial2", 'incorrecto');
+      } else {
+        marcar_campos("#fkID_territorial2", 'correcto');
+      }
+		if(bandera == false){
+			alert('Complete el formulario ó agregue una territorial');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	//Campos incompletos de empleado
 	function validar_campos_empleado(){
 		var bandera = true;
@@ -456,6 +632,8 @@
       $(campo).addClass('is-invalid');
     }
   }
+
+
 
 	//Funcion para el Datatable
     $(document).ready(function () {

@@ -15,12 +15,17 @@ class Usuario
     }
 
     //Trae todos los usuario registrados
-    public function getUsuario()
+    public function getUsuario($permisoconsulta)
     {
+        if ($permisoconsulta[0]["fkID_cargo"]==1) {
+            $url="";
+        } else {
+            $url=" AND persona.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
+        }
         $query  = "select *,CONCAT(nombres_persona, ' ', apellidos_persona) as nombres, nombre_cargo FROM usuario
                     INNER JOIN persona on persona.id_persona = usuario.fkID_persona
                     INNER JOIN cargo on cargo.id_cargo = persona.fkID_cargo
-                    WHERE usuario.estado = 1 AND persona.estado = 1";
+                    WHERE usuario.estado = 1 AND persona.estado = 1". $url;
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -35,6 +40,19 @@ class Usuario
                     INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo
                     INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
                     WHERE usuario.id_usuario='" . $id_usuario . "' and fkID_modulo ='" . $id_modulo . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los permisos
+    public function getPermisosconsulta($id_usuario)
+    {
+        $query  = "select fkID_cargo,fkID_proyecto FROM `persona`
+                    INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
+                    WHERE usuario.id_usuario='" . $id_usuario . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -129,6 +147,41 @@ class Usuario
         }
     }
 
+    //Crea un nuevo empleado
+    public function insertaProyecto($data)
+    {   
+        $query  = "insert into `proyecto`(`nombre_proyecto`) VALUES ('" . strtoupper($data['nombre_proyecto'])."')";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Crea un nuevo empleado
+    public function insertaTerritorial($data)
+    {   
+        $query  = "insert into `territorial_proyecto`(`fkID_territorial`, `direccion_territorial`, `fkID_proyecto`) VALUES ('" . $data['fkID_territorial']."','" . strtoupper($data['direccion_territorial']) ."','" . $data['fkID_proyecto'] ."')";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Traer un usuario registrados
+    public function consultaidProyecto($data)
+    {
+        $query  = "select MAX(id_proyecto) AS id FROM proyecto where estado=1";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
     //Trae todas los empleados
     public function getPersona()
     {
@@ -214,6 +267,7 @@ class Usuario
             return false;
         }
     }
+
 
     //Elimina logico un usuario
     public function eliminaLogicoUsuario($data)
@@ -321,25 +375,4 @@ class Usuario
         }
     }
 
-    //Envia mail
-    public function enviarMail($email, $subject, $message)
-    {
-        if (mail($email, $subject, $message)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    //Crea un nuevo cliente
-    /*public function getLog($usuarioNombre)
-{
-$query  = "INSERT INTO tb_client (business_name,subscriber,department,municipality) VALUES ('" . $data['business_name'] . "','" . $data['subscriber'] . "','" . $data['department'] . "','" . $data['municipality'] . "')";
-$result = mysqli_query($this->link, $query);
-if (mysqli_affected_rows($this->link) > 0) {
-return true;
-} else {
-return false;
-}
-}*/
 }
