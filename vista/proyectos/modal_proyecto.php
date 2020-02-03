@@ -10,11 +10,12 @@
       </div>
       <div class="modal-body">
         <form id="form_Proyecto">
-          <input type="hidden" id="id_Proyecto">
+          <input type="hidden" id="id_proyecto">
+          <input type="hidden" id="fkID_proyecto">
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Nombre del Proyecto:</label>
             <div class="col-sm-7">
-              <input class="form-control" type="text" id="nombre_Proyecto" style="text-transform:uppercase;">
+              <input class="form-control" type="text" id="nombre_proyecto" style="text-transform:uppercase;">
             </div>
             <div class="col-sm-2 text-danger">
             </div>

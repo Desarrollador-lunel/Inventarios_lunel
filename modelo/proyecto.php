@@ -3,7 +3,7 @@ include dirname(__file__, 2) . "/config/conexion.php";
 /**
  *
  */
-class Usuario
+class Proyecto
 {
     private $conn;
     private $link;
@@ -103,16 +103,11 @@ class Usuario
         return $data;
     }
 
-    //Edita proyecto
-    public function editaProyecto($data)
+
+    //Elimina logico un proyecto
+    public function eliminaLogicoProyecto($data)
     {
-        if ($data['pass_usuario']===$data['pass_antiguo']) {
-            $r="";
-        } else {
-            $r=",pass_usuario = sha1('" . $data['pass_usuario'] . "')";
-        }
-        
-        $query  = "UPDATE usuario SET nombre_usuario = '" . $data['nombre_usuario'] . "' $r WHERE id_usuario = '" . $data['id_usuario'] . "'";
+        $query  = "UPDATE `proyecto` SET estado = 2 WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;
@@ -121,11 +116,70 @@ class Usuario
         }
     }
 
-
-    //Elimina logico un proyecto
-    public function eliminaLogicoProyecto($data)
+    //Traer un usuario registrados
+    public function consultaidProyecto($data)
     {
-        $query  = "UPDATE `proyecto` SET estado = 2 WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
+        $query  = "select MAX(id_proyecto) AS id FROM proyecto where estado=1";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Traer datos del proyecto 
+    public function consultaDatosProyecto($data)
+    {
+        $query  = "select id_proyecto, nombre_proyecto FROM `proyecto` WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Traer datos de las territoriales del proyecto 
+    public function consultaDatosTerritorial($data)
+    {
+        $query  = "select id_territorial_proyecto,fkID_territorial,direccion_territorial,fkID_proyecto, nombre_territorial FROM `territorial_proyecto`
+            INNER JOIN territorial on id_territorial = fkID_territorial
+            WHERE fkID_proyecto = '" . $data['id_proyecto'] . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Edita Usuario
+    public function eliminaTerritorial($data)
+    {
+        $query  = "delete FROM `territorial_proyecto` WHERE id_territorial_proyecto = '" . $data['id_territorial_proyecto'] . "'";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Edita territorial del proyecto
+    public function editaTerritorial($data)
+    {
+        
+        $query  = "update `territorial_proyecto` SET `direccion_territorial`= '" . $data['direccion_territorial'] . "' WHERE fkId_proyecto = '" . $data['fkId_proyecto'] . "' and fkID_territorial = '" . $data['fkID_proyecto'] . "'";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Edita territorial del proyecto
+    public function editaProyecto($data)
+    {
+        $query  = "update `proyecto` SET `nombre_proyecto`= '" . $data['nombre_proyecto'] . "' WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;

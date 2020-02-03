@@ -2,21 +2,11 @@
 	var pass_antiguo;
 
 var agregarte = [];
+var cargarterri = [];
 //agregarte.push(['Study',2]);
 var len = agregarte.length;
 //console.log(agregarte[5][1]); // 9
 console.log(len)
-    //Funcion boton crear Usuario
-	$("#btn_crear_usuario").click(function(){
-		$("#modalUsuarioLabel").text("Crear Usuario");
-		$("#btn_guardar_Usuario").attr("data-accion","crear");
-		$("#form_Usuario")[0].reset();
-		$("#nombre_usuario").attr('disabled', 'disabled');
-		$("#pass_usuario").attr('disabled', 'disabled');
-		$("#nombre_cargo").prop('disabled', true);
-		$("#btnadicionempleado").prop('disabled', false);
-		$("#btn_guardando").hide();
-	});
 
 	//Funcion abrir formulario de empleado
 	$("#btnadicionproyecto").click(function(){
@@ -25,26 +15,18 @@ console.log(len)
         $("#fkID_proyecto").prop('disabled', true);
 	});
 
-	//Funcion abrir formulario de empleado
-	$("#btnadicionempleado").click(function(){
-		$("#form_Empleado")[0].reset();
-		$("#fkID_territorial").prop('disabled', true);
-        $("#fkID_proyecto").prop('disabled', true);
-	});
-
-	//Funcion guardar empleado
-	$("#btn_guardar_Empleado").click(function(){
-		respuesta = validar_campos_empleado();
-		if (respuesta) {
-		crea_empleado();
-		}
-	});
-
 	//Funcion guardar empleado
 	$("#btn_guardar_Proyecto").click(function(){
 		respuesta = validar_campos_proyecto();
 		if (respuesta) {
-		crea_proyecto();
+			accion = $(this).attr('data-accion');
+			if(accion == 'crear'){
+				crea_proyecto();
+			}
+			if(accion == 'editar'){
+				console.log("editamos")
+				 edita_Proyecto();
+			}
 		}
 	});
 
@@ -95,257 +77,165 @@ console.log(len)
 	}
 
 	//Funcion guardar Usuario
-	$("#btn_guardar_Usuario").click(function(){ 
-		respuesta = validar_campos();
-		if (respuesta) {
-			accion = $(this).attr('data-accion');
-			if(accion == 'crear'){
-				crea_Usuario();
-			}
-			if(accion == 'editar'){
-				 edita_Usuario();
-			}
-		} 
-	});
-
-
-	//Funcion para guardar el Usuario
-	function crea_Usuario(){
-		nombre_usuario = $("#nombre_usuario").val();
-	 	pass_usuario = $("#pass_usuario").val();
-	 	fkID_persona = $("#fkID_persona").val();
-	    $.ajax({
-	      url:  "../controlador/ajaxUsuario.php",
-	      data: 'nombre_usuario='+ nombre_usuario + '&pass_usuario='+ pass_usuario + '&fkID_persona='+ fkID_persona + '&tipo=inserta',
-	    success:function(r){
-	    	$("#btn_guardar_Usuario").hide();
-          	$("#btn_guardando").show();
-			alertify.success('Creado correctamente');
-		  	setTimeout('cargar_sitio()',1000);
-		}
-	})
-	}
-
-	//Funcion guardar Usuario
-	$("[name*='btn_editar_usuario']").click(function(){
-		id_Usuario = $(this).attr('data-id-Usuario');
-		console.log('Entro a editar Usuario');
-		$("#modalUsuarioLabel").text("Editar Usuario");
-		$("#fkID_persona").attr('disabled', 'disabled');
-		$("#nombre_cargo").prop('disabled', true);
-		$("#nombre_usuario").prop('disabled', false);
-	 	$("#pass_usuario").prop('disabled', false);
-	 	$("#btnadicionempleado").prop('disabled', true);
-		carga_Usuario(id_Usuario);
-		$("#btn_guardar_Usuario").attr("data-accion","editar");
+	$("[name*='btn_editar']").click(function(){
+		id_Proyecto = $(this).attr('data-id-proyecto');
+		console.log('Entro a editar Proyecto');
+		$("#modalProyectoLabel").text("Editar Proyecto");
+		carga_Proyecto(id_Proyecto);
+		$("#btn_guardar_Proyecto").attr("data-accion","editar");
 		$("#btn_guardando").hide();
 	})
 
-	//Funcion guardar Usuario
-	$("[name*='btn_cerrar_sesion']").click(function(){
-		console.log("hola")
-		$.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "tipo=cerrar_sesion",
-	    })
-	    .done(function(data) {
-	    	console.log(data)
-	    })
-	    .fail(function(data) {
-	        console.log(data);
-	    })
-	    .always(function(data) {
-	        console.log(data);
-	    })
-	})
+	//Funcion para guardar 
+	function edita_Proyecto(){
+		console.log("edita vegeta")
+		id_proyecto = $("#id_proyecto").val();
+		nombre_Proyecto = $("#nombre_proyecto").val();
+	    $.ajax({ 
+	      url: "../controlador/ajaxProyecto.php",
+	      data: 'id_proyecto='+id_proyecto+'&nombre_proyecto='+  nombre_Proyecto +'&tipo=edita',
+	      dataType: 'json',
+	     success:function(data){
+	     	console.log("vegeta")
+	      console.log(data[0]["id"]);
+	      proyecto = $("#id_proyecto").val();
+	      console.log(proyecto)
+	      edita_territoriales(proyecto);
+	      //$("#modalProyecto").removeClass("show");
+	      //$("#modalProyecto").removeClass("modal-backdrop");
+	      //alertify.success('Actualizado correctamente');
+		  //setTimeout('cargar_sitio()',1000);
 
-	//Carga el Usuario por el ID
-	function carga_Usuario(id_Usuario){
-
-	    console.log("Carga el Usuario "+ id_Usuario);
-
-	    $.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "id_usuario="+id_Usuario+"&tipo=consulta",
-	        dataType: 'json'
-	    })
-	    .done(function(data) {
-
-	        $.each(data[0], function( key, value ) {
-	        	if (key=="pass_usuario") {
-	        		pass_antiguo=value;
-	        	}
-	          console.log(key+"--"+value);
-	          $("#"+key).val(value);
-	        });
-
-	        id_Usuario = data.id_Usuario;
-	    })
-	    .fail(function(data) {
-	        console.log(data);
-	    })
-	    .always(function(data) {
-	        console.log(data);
-	    })
-	};
-
-	//Funcion para guardar el Usuario
-	function edita_Usuario(){
-		id_usuario = $("#id_usuario").val();
-	 	nombre_usuario = $("#nombre_usuario").val();
-	 	pass_usuario = $("#pass_usuario").val();
-	 	fkID_persona = $("#fkID_persona").val();
-	    $.ajax({
-	      url: "../controlador/ajaxUsuario.php",
-	      data: 'id_usuario='+id_usuario+'&nombre_usuario='+  nombre_usuario +'&pass_antiguo='+  pass_antiguo + '&pass_usuario='+ pass_usuario + '&fkID_persona='+ fkID_persona + '&tipo=edita',
-	     success:function(r){
-			alertify.success('Editado correctamente');
-		  	setTimeout('cargar_sitio()',1000);
 		}
 	})
-	}
-
-	//Funcion para guardar el empleado
-	function crea_empleado(){
-	 	nombre_empleado = $("#nombre_empleado").val();
-	 	apellido_empleado = $("#apellido_empleado").val();
-	 	cedula_empleado = $("#cedula_empleado").val();
-	 	telefono_empleado = $("#telefono_empleado").val();
-	 	celular_empleado = $("#celular_empleado").val();
-	 	email_empleado = $("#email_empleado").val();
-	 	fkID_cargo = $("#fkID_cargo").val();
-	 	fkID_proyecto = $("#fkID_proyecto").val();
-	 	fkID_territorial = $("#fkID_territorial").val();
-	    $.ajax({
-	      url: "../controlador/ajaxUsuario.php", 
-	      data: 'nombre_empleado='+nombre_empleado+'&apellido_empleado='+apellido_empleado+'&cedula_empleado='+cedula_empleado+'&telefono_empleado='+telefono_empleado+'&celular_empleado='+celular_empleado+'&email_empleado='+email_empleado+'&fkID_cargo='+fkID_cargo+'&fkID_proyecto='+fkID_proyecto+'&fkID_territorial='+fkID_territorial+'&tipo=inserta_empleado'
-	    })
-	    .done(function(data) {
-	      //---------------------
-	      console.log(data);
-	      $("#modalEmpleado").removeClass("show");
-	      $("#modalEmpleado").removeClass("modal-backdrop");
-	      carga_empleado();
-	      //$("#nombre_tipo_equipo").val("");
-	    })
-	    .fail(function(data) {
-	      console.log(data);
-	    })
-	     always(function(data) {
-	      console.log(data);
-	    });
 	}
 
 	//Funcion para crear proyecto
 	function crea_proyecto(){
-	 	nombre_Proyecto = $("#nombre_Proyecto").val();
+	 	nombre_Proyecto = $("#nombre_proyecto").val();
 	    $.ajax({
-	      url: "../controlador/ajaxUsuario.php", 
+	      url: "../controlador/ajaxProyecto.php", 
 	      data: 'nombre_proyecto='+nombre_Proyecto+'&tipo=inserta_proyecto',
 	      dataType: 'json'
 	    })
 	    .done(function(data) {
+	      console.log("vegeta")
 	      console.log(data[0]["id"]);
 	      agrega_territoriales(data[0]["id"]);
+	      $("#modalProyecto").removeClass("show");
+	      $("#modalProyecto").removeClass("modal-backdrop");
+	      alertify.success('Creado correctamente');
+		  setTimeout('cargar_sitio()',1000);
 	    })
 	    .fail(function(data) {
 	      console.log(data);
 	    })
 	     always(function(data) {
-	      console.log(data);
+	      console.log("OK");
 	    });
 	}
 
 	//Funcion para agrgar territoriales proyecto
 	function agrega_territoriales(fkID_proyecto){
+		console.log("chaviito")
 	 	var len = agregarte.length;
 			for (var i = 0; i < len; i++) {
 		    console.log(agregarte[i][0]);
 		    console.log(agregarte[i][1]);
 		    console.log(fkID_proyecto);
+			insertar_territoriales(fkID_proyecto,agregarte[i][0],agregarte[i][1]);
+	    }
+	}
+
+	//Funcion para agrgar territoriales proyecto editado
+	function edita_territoriales(fkID_proyecto){
+		console.log("chaviito")
+	 	var len = agregarte.length;
+	 	var ten = cargarterri.length;
+			for (var i = 0; i < len; i++) {
+				for (var j = 0; j < ten; j++) {
+					if (agregarte[i][0]==cargarterri[j][0]) {
+						cont=1;
+						if (agregarte[i][1]!=cargarterri[j][1]) {
+							actualizar_territoriales(fkID_proyecto,agregarte[i][0],agregarte[i][1])
+						}
+					} 
+				}
+				if (cont=1) {
+					insertar_territoriales(fkID_proyecto,agregarte[i][0],agregarte[i][1]);	
+				}
+			cont=0;
+	    }
+	}
+
+	//Funcion para agrgar territoriales proyecto
+	function insertar_territoriales(fkID_proyecto,id_territorial,direccion){
 	    $.ajax({
-	      url: "../controlador/ajaxUsuario.php", 
-	      data: 'fkID_territorial='+agregarte[i][0]+'&direccion_territorial='+agregarte[i][1]+'&fkID_proyecto='+fkID_proyecto+'&tipo=agregar_territorial',
+	      url: "../controlador/ajaxProyecto.php", 
+	      data: 'fkID_territorial='+id_territorial+'&direccion_territorial='+direccion+'&fkID_proyecto='+fkID_proyecto+'&tipo=agregar_territorial',
 	      success:function(r){
-			console.log(r);
+			console.log("OK");
 		}
 	    })
-	    }
-	    $("#modalProyecto").removeClass("show");
-	    $("#modalProyecto").removeClass("modal-backdrop");
-	    alert('Guardado el proyecto');
 	}
 
-	function carga_empleado(){
-
+	//Funcion para editar territoriales que ya fueron asignadas al proyecto
+	function actualizar_territoriales(fkID_proyecto,id_territorial,direccion){
+		console.log(fkID_proyecto)
 	    $.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "tipo=ultimo_empleado",
+	      url: "../controlador/ajaxProyecto.php", 
+	      data: 'fkID_territorial='+id_territorial+'&direccion_territorial='+direccion+'&fkID_proyecto='+fkID_proyecto+'&tipo=agregar_territorial',
+	      success:function(r){
+			console.log("OK");
+		}
+	    })
+	}
+
+	//Carga datos del proyecto
+	function carga_Proyecto(id_proyecto){
+	    $.ajax({
+	        url: "../controlador/ajaxProyecto.php",
+	        data: 'id_proyecto='+id_proyecto+'&tipo=consultaproyecto',
 	        dataType: 'json'
 	    })
 	    .done(function(data) {
-
+	    	console.log("popeye")
 	        $.each(data[0], function( key, value ) {
-	          	console.log(key+"--"+value);
-	          	if(key == "id_persona"){
-	          		optionValue = value;
-	          	}
-	          	if(key == "persona"){
-            		optionText = value;
-	          	}
-	        });
-	        carga_Datos(optionValue);
-	        $('#fkID_persona').append(new Option(optionText, optionValue));
-	        $('#fkID_persona').val(optionValue);
-	        alert('Guardado el empleado');
-	    })
-	    .fail(function(data) {
-	        console.log(data);
-	    })
-	    .always(function(data) {
-	        console.log(data);
-	    });
-	};
-
-	function cargar_pagina() {
-		console.log("entro")
-		$('#tabla').load('');
-		$('#tabla').load('usuario/Vusuario.php');
-	}
-
-	//Carga datos del usuario
-	function carga_Datos(id_Usuario){
-	    $.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "id_usuario="+id_Usuario+"&tipo=consultadatos",
-	        dataType: 'json'
-	    })
-	    .done(function(data) {
-	        $.each(data[0], function( key, value ) {
-	          console.log(key+"--"+value);
+	          console.log(key+"--"+value); 
 	          $("#"+key).val(value);
 	        });
+	        cargar_territoriales_proyecto(id_proyecto);
 	    })
 	    .fail(function(data) {
-	        console.log(data);
+	    	console.log("pailas")
+	        //console.log(data);
 	    })
 	    .always(function(data) {
 	        console.log(data);
 	    })
 	};
 
-	//Carga territoriales del proyecto
-	function cargar_territorial(id_territorial){
+	//Carga datos del proyecto
+	function cargar_territoriales_proyecto(id_proyecto){
+		console.log(id_proyecto)
 	    $.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "id_territorial="+id_territorial+"&tipo=consultaterritorial",
-	        dataType: 'json' 
+	        url: "../controlador/ajaxProyecto.php",
+	        data: "id_proyecto="+id_proyecto+"&tipo=consultadatosterritoriales",
+	        dataType: 'json'
 	    })
 	    .done(function(data) {
-	        $.each(data, function (key, value) {
-	        	console.log("holaa")
-                $("#fkID_territorial").append("<option value=" + value.id_territorial + ">" + value.nombre_territorial + "</option>");
-            }); 
+	    	var len = data.length;
+			for (var i = 0; i < len; i++) {
+	        $.each(data[i], function( key, value ) {
+	          console.log(key+"--"+value);
+	          if (key=="id_territorial_proyecto") {id = value};
+	          if (key=="fkID_territorial") {id_territorial = value};
+	          if (key=="nombre_territorial") {nombre = value};
+	          if (key=="direccion_territorial") {direccion = value};
+	          if (key=="fkID_proyecto") {id_proyecto = value};
+	        });
+	        editar_territorial(id,id_territorial,nombre,direccion,id_proyecto)
+	        }
 	    })
 	    .fail(function(data) {
 	        console.log(data);
@@ -355,122 +245,102 @@ console.log(len)
 	    })
 	};
 
-	//Carga territoriales del proyecto
-	function cargar_proyectos(){
-	    $.ajax({
-	        url: "../controlador/ajaxUsuario.php",
-	        data: "tipo=consultaproyectos",
-	        dataType: 'json' 
-	    })
-	    .done(function(data) {
-	        $.each(data, function (key, value) {
-	        	console.log("holaa goku")
-                $("#fkID_proyecto").append("<option value=" + value.id_proyecto + ">" + value.nombre_proyecto + "</option>");
-            }); 
-	    })
-	    .fail(function(data) {
-	        console.log(data);
-	    })
-	    .always(function(data) {
-	        console.log(data);
-	    })
-	};
-
-
-	//Funcion eliminar Usuario
-	$("[name*='btn_eliminar_usuario']").click(function(){
-		id_Usuario = $(this).attr('data-id-usuario');
-		confirmar(id_Usuario);
+	function editar_territorial(id,id_territorial,nombre,direccion,id_proyecto) {
+		camponombre = '<div class="form-group row" id="territorial'+id_territorial+'">'+
+			'<div class="col-sm-10" >'+
+              '<label class="form-control " type="text" id="territorial' + id_territorial + '"  name="territorial' + id_territorial + '">'+nombre+'     '+direccion+'</label>'+
+              '</div>'+
+              '<div class="col-sm-2 text-center">'+
+              '<button data-id-territorial="'+id_territorial+'" data-id-proyecto="'+id_proyecto+'" type="button" class="btn btn-danger"'+
+               'id="btn_eliminar_Territorial'+id_territorial+'">X</button>'+
+            '</div></div>';
+		$("#territorial_agregada").append(camponombre);
+		$("#direccion_territorial").val('');
+	 	$("#fkID_territorial2").val('');
+	 	$("#fkID_proyecto").val(id_proyecto);
+	 	$("#direccion_territorial").removeClass('is-invalid');
+      	$("#direccion_territorial").removeClass('is-valid');
+      	$("#fkID_territorial2").removeClass('is-invalid');
+      	$("#fkID_territorial2").removeClass('is-valid');
+      	console.log("si")
+      	//Funcion eliminar territorial seleccionada
+	$("#btn_eliminar_Territorial"+id_territorial).click(function(){ 
+		console.log("chavo")
+		id_territorial = $(this).attr('data-id-territorial');
+		campo = "territorial"+id_territorial
+		respues = confirmar_territorial(id,id_territorial,nombre,direccion,id_proyecto)
+		console.log("mi respuesta es"+respues)
+		if (respues == 1) {
+		$("#"+campo).remove();
+		var len = agregarte.length;
+			for (var i = 0; i < len; i++) {
+		    if (agregarte[i][0]==id_territorial) { 
+		    agregarte.splice(i,1);
+		    }
+			}
+		var ten = cargarterri.length;
+			for (var i = 0; i < ten; i++) {
+		    if (cargarterri[i][0]==id_territorial) { 
+		    cargarterri.splice(i,1);
+		    }
+			}
+		}
 	});
-
-	function confirmar(id) {
-	alertify.confirm('Eliminar Datos', '¿Esta seguro de eliminar el registro?',
-				function(){ elimina_usuario(id) },
-                function(){ alertify.error('Se cancelo')});
+	agregarte.push([id_territorial,direccion]);
+	cargarterri.push([id_territorial,direccion]);
 	}
 
-	//Funcion para eliminar el Usuario
-	function elimina_usuario(id_usuario){
+	function confirmar_territorial(id) {
+	alertify.confirm('Eliminar Datos', '¿Esta seguro de eliminar el registro?',
+				function(){ elimina_territorial(id); mensaje = 1 },
+                function(){ alertify.error('Se cancelo'); mensaje = 0});
+		return mensaje;
+	}
+
+	//Funcion para eliminar la territorial
+	function elimina_territorial(id){
 	    $.ajax({
-	      url: "../controlador/ajaxUsuario.php",
-	      data: 'id_usuario='+id_usuario+ '&tipo=elimina_logico',
+	      url: "../controlador/ajaxProyecto.php",
+	      data: 'id_territorial_proyecto='+id+ '&tipo=elimina_territorial',
 	    success:function(r){
 			if (r==1) {
-				alertify.error("fallo el servidor");
+				//$("#modalProyecto").removeClass("show");
+			    //$("#modalProyecto").removeClass("modal-backdrop");
+			    alertify.success('Eliminado correctamente');
+				//setTimeout('cargar_sitio()',1000);
 			} else{  
-				$('#tabla').load('usuario/Vusuario.php')
-				alertify.success("Eliminado con exito");
+				alertify.error("fallo el servidor");
 			}
 		}
 	})
 	}
 
-	//validar el select de personas
-	$("#fkID_persona").change(function(){
-			validar_usuario();
-            console.log("si entra")
-            fkID_persona = $("#fkID_persona").val();
-            console.log(fkID_persona)
-            if (fkID_persona>0) {
-            	console.log("no")
-            	carga_Datos(fkID_persona);
-            } else {
-            	console.log("si")
-            	$("#nombre_usuario").val('');
-	 			$("#pass_usuario").val('');
-	 			$("#nombre_cargo").val('');
-            }
-        });
+	//Funcion eliminar Usuario
+	$("[name*='btn_eliminar']").click(function(){
+		id_proyecto = $(this).attr('data-id-proyecto');
+		confirmar(id_proyecto);
+	});
 
-	//validar el select de cargo
-	$("#fkID_cargo").change(function(){
-            fkID_cargo = $("#fkID_cargo").val();
-            console.log(fkID_cargo);
-            if (fkID_cargo < 2 ) {
-            	op = $("#fkID_proyecto").length;
-            	$("#fkID_proyecto").empty()
-        		$("#fkID_proyecto").attr('disabled', false);
-        		$("#fkID_proyecto").append("<option value='0'>Seleccione..</option>");
-        		$("#fkID_proyecto").append("<option value='1'>PROYECTO LUNEL-IE</option>");
-            } else {
-            	$("#fkID_proyecto").empty()
-            	$("#fkID_proyecto").append("<option value='0'>Seleccione</option>");
-            	cargar_proyectos();
-        		$("#fkID_proyecto").prop('disabled', false);
-            }
-        });
+	function confirmar(id) {
+	alertify.confirm('Eliminar Datos', '¿Esta seguro de eliminar el registro?',
+				function(){ elimina_proyecto(id) },
+                function(){ alertify.error('Se cancelo')});
+	}
 
-	//validar el select de usuario
-	function validar_usuario(argument) {
-		console.log("si entree")
-		fkID_persona = $("#fkID_persona").val();
-		console.log(fkID_persona)
-            if (fkID_persona != 0 ) {
-            	console.log("goku")
-            $.ajax({
-	      		url: "../controlador/ajaxUsuario.php",
-	      		data: 'id_usuario='+fkID_persona+ '&tipo=buscar_usuario',
-	      		dataType: 'json'
-			})
-			.done(function(data) {
-				console.log(data[0]["conteo"]);
-				console.log("si")
-				if (data[0]["conteo"]=="1") {
-					alert('Usuario ya fue creado');
-					$("#nombre_usuario").val('');
-	 				$("#pass_usuario").val('');
-	 				$("#nombre_cargo").val('');
-	 				$("#fkID_persona").val('');
-	 				$("#fkID_persona").append("<option value='0'>Seleccione..</option>");
-					}
-	    })
-	    .fail(function(data) {
-	        console.log(data);
-	    })
-	    .always(function(data) {
-	        console.log(data);
-	    });
-        }
+	//Funcion para eliminar el Usuario
+	function elimina_proyecto(id_proyecto){
+	    $.ajax({
+	      url: "../controlador/ajaxProyecto.php",
+	      data: 'id_proyecto='+id_proyecto+ '&tipo=elimina_logico',
+	    success:function(r){
+			if (r==1) {
+				alertify.error("fallo el servidor");
+			} else{  
+				$('#tabla').load('proyectos/Vproyecto.php')
+				alertify.success("Eliminado con exito");
+			}
+		}
+	})
 	}
 
 	//validar el select de proyecto
@@ -672,7 +542,7 @@ console.log(len)
   		$("#modalEquipo").removeClass("show");
  		$('body').removeClass('modal-open');//eliminamos la clase del body para poder hacer scroll
   		$('.modal-backdrop').remove();//eliminamos el backdrop del modal
-  		$('#tabla').load('usuario/Vusuario.php');
+  		$('#tabla').load('proyectos/Vproyecto.php');
     }
 
     function validarEmail( email ) {
@@ -684,6 +554,18 @@ console.log(len)
 	    	return true;
 	    }	    
 	}
+
+	//validar el select de personas
+	$("#fkID_territorial2").change(function(){
+		   fkID_territorial = $("#fkID_territorial2").val();
+		   var len = agregarte.length;
+			for (var i = 0; i < len; i++) {
+				if (agregarte[i][0]) {
+					alert("La territorial ya esta asignada");
+					$("#fkID_territorial2").val(0);
+				}
+	    }
+    });
 
 
 </script>

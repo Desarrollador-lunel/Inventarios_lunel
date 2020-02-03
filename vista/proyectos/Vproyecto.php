@@ -1,8 +1,8 @@
  <?php include "../../controlador/proyecto_controller.php";
     session_start();
     $idUsuario = $_SESSION['id_usuario'];
-    $permisos = $usuario->getPermisos($idUsuario,3);
-    $permisoconsulta = $usuario->getPermisosconsulta($idUsuario);
+    $permisos = $proyecto->getPermisos($idUsuario,3);
+    $permisoconsulta = $proyecto->getPermisosconsulta($idUsuario);
 ?>
 <div class="row">
     <div class="col-md-12">

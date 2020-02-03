@@ -1,11 +1,11 @@
 <?php
 include dirname(__file__, 2) . '../modelo/proyecto.php';
-$usuario = new Usuario();
+$proyecto = new Proyecto();
 
 
 function getTablaProyecto($permisos,$permisoconsulta)
 {
-    $usuario = new Usuario();
+    $usuario = new Proyecto();
             $listaProyecto = $usuario->getProyecto($permisoconsulta);
             if ($permisos[0]["consultar"]==1) {
             if (isset($listaProyecto)) {
@@ -43,7 +43,7 @@ function getTablaProyecto($permisos,$permisoconsulta)
 function getSelectTerritorial()
     {
         //Instancia del equipo
-        $usuario = new Usuario();
+        $usuario = new Proyecto();
         //Lista del menu Nivel 1
         $listaTerritorial = $usuario->getTerritoriales();
         //Se recorre array de nivel 1

@@ -269,6 +269,7 @@ class Usuario
     }
 
 
+
     //Elimina logico un usuario
     public function eliminaLogicoUsuario($data)
     {
