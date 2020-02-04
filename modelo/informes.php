@@ -100,8 +100,44 @@ class Informes
     }
 
     //Trae el inventario total
-    public function getInventarioTotal($where)
+    public function getInventarioTotal($data)
     {
+        $where = '';
+        if (isset($data["filtro_proyecto"])) {
+            if ($data["filtro_proyecto"] != 0) {
+                $where = $where . ' AND fkID_proyecto=' . $data["filtro_proyecto"];
+            }
+        }
+        if (isset($data["filtro_territorial"])) {
+            if ($data["filtro_territorial"] != 0) {
+                $where = $where . ' AND fkID_territorial=' . $data["filtro_territorial"];
+            }
+        }
+        if (isset($data["filtro_estado"])) {
+            if ($data["filtro_estado"] != 0) {
+                $where = $where . ' AND fkID_estado=' . $data["filtro_estado"];
+            }
+        }
+        if (isset($data["filtro_tipo_equipo"])) {
+            if ($data["filtro_tipo_equipo"] != 0) {
+                $where = $where . ' AND fkID_tipo_equipo=' . $data["filtro_tipo_equipo"];
+            }
+        }
+        if (isset($data["filtro_modelo"])) {
+            if ($data["filtro_modelo"] != 0) {
+                $where = $where . ' AND fkID_modelo=' . $data["filtro_modelo"];
+            }
+        }
+        if (isset($data["filtro_marca"])) {
+            if ($data["filtro_marca"] != 0) {
+                $where = $where . ' AND fkID_marca=' . $data["filtro_marca"];
+            }
+        }
+        if (isset($data["filtro_procesador"])) {
+            if ($data["filtro_procesador"] != 0) {
+                $where = $where . ' AND fkID_procesador=' . $data["filtro_procesador"];
+            }
+        }
         $query = "SELECT *, CONCAT(nombres_persona,' ',apellidos_persona) AS persona FROM inventario
                 INNER JOIN equipo ON equipo.id_equipo = inventario.fkID_equipo
                 INNER JOIN tipo_equipo ON tipo_equipo.id_tipo_equipo = equipo.fkID_tipo_equipo
@@ -113,26 +149,11 @@ class Informes
                 INNER JOIN territorial ON territorial.id_territorial = persona.fkID_territorial
                 INNER JOIN estado_equipo ON estado_equipo.id_estado_equipo = equipo.fkID_estado
                 INNER JOIN proyecto ON proyecto.id_proyecto = persona.fkID_proyecto
-                WHERE inventario.estado = 1" . $where;
+                WHERE inventario.estado = 1 " . $where;
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
         array_pop($data);
         return $data;
     }
-
-    //Trae todos los permisos
-    public function getPermisos($id_usuario,$id_modulo)
-    {
-        $query  = "select permisos.* FROM `permisos`
-                    INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo
-                    INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
-                    WHERE usuario.id_usuario='" . $id_usuario . "' and fkID_modulo ='" . $id_modulo . "'";
-        $result = mysqli_query($this->link, $query);
-        $data   = array();
-        while ($data[] = mysqli_fetch_assoc($result));
-        array_pop($data);
-        return $data;
-    }
-
 }

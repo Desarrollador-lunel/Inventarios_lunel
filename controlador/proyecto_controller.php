@@ -11,8 +11,8 @@ function getTablaProyecto($permisos,$permisoconsulta)
             if (isset($listaProyecto)) {
             for ($i = 0; $i < sizeof($listaProyecto); $i++) {
                 echo '<tr>';
-                echo '<td class="text-center detalle" id="btn_detalle_proyecto" name="btn_detalle_proyecto" title="Click Ver Detalles"  style="cursor: pointer" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["nombre_proyecto"] . '</td>';
-                echo '<td class="text-center detalle" id="btn_detalle_proyecto" name="btn_detalle_proyecto" title="Click Ver Detalles"  style="cursor: pointer" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["cantidad"] . '</td>';
+                echo '<td style="cursor: pointer" class="detalle" name="btn_detalle" title="Click Ver Detalles" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["nombre_proyecto"] . '</td>';
+                echo '<td style="cursor: pointer" class="detalle" name="btn_detalle" title="Click Ver Detalles" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["cantidad"] . '</td>';
                 if ($permisos[0]["editar"]==1 || $permisos[0]["eliminar"]==1) {
                     echo '<td class="text-center">';
                 }
@@ -37,6 +37,56 @@ function getTablaProyecto($permisos,$permisoconsulta)
             echo '<td colspan="9">No tienen permisos para consultar</td>';
             echo '</tr>';
         }
+                    
+}
+
+function getTablaDetalleProyecto($id_proyecto){
+            $valor=0;
+            $contenido = array();
+            $usuario = new Proyecto();
+            $listadetalleProyecto = $usuario->getDetalleProyecto($id_proyecto);
+            $listaTipoelementos = $usuario->getTipoEquipo();
+            if (isset($listadetalleProyecto)) {
+            echo '<td class="text-center detalle" style="cursor: pointer">' . $listadetalleProyecto[0]["nombre_proyecto"] . '</td>';
+                        for ($i = 0; $i < sizeof($listaTipoelementos); $i++) {
+                            for ($j = 0; $j < sizeof($listadetalleProyecto); $j++) {
+                                if ($listaTipoelementos[$i]["nombre_tipo_equipo"]==$listadetalleProyecto[$j]["nombre_tipo_equipo"]) {
+                                    $valor=$listadetalleProyecto[$j]["canti"];
+                                }
+                            }
+                            echo '<td class="text-center detalle" style="cursor: pointer">' . $valor . '</td>';
+                            $valor=0;
+                        }
+                        } else {
+                            echo '<tr>';
+                            echo '<td colspan="9">No existen registro</td>';
+                            echo '</tr>';
+                        }
+                    
+}
+
+function getTablaDetalleTerritorial($id_proyecto){
+            $valor=0;
+            $contenido = array();
+            $usuario = new Proyecto();
+            $listadetalleProyecto = $usuario->getDetalleProyecto($id_proyecto);
+            $listaTipoelementos = $usuario->getTipoEquipo();
+            if (isset($listadetalleProyecto)) {
+            echo '<td class="text-center detalle" style="cursor: pointer">' . $listadetalleProyecto[0]["nombre_proyecto"] . '</td>';
+                        for ($i = 0; $i < sizeof($listaTipoelementos); $i++) {
+                            for ($j = 0; $j < sizeof($listadetalleProyecto); $j++) {
+                                if ($listaTipoelementos[$i]["nombre_tipo_equipo"]==$listadetalleProyecto[$j]["nombre_tipo_equipo"]) {
+                                    $valor=$listadetalleProyecto[$j]["canti"];
+                                }
+                            }
+                            echo '<td class="text-center detalle" style="cursor: pointer">' . $valor . '</td>';
+                            $valor=0;
+                        }
+                        } else {
+                            echo '<tr>';
+                            echo '<td colspan="9">No existen registro</td>';
+                            echo '</tr>';
+                        }
                     
 }
 

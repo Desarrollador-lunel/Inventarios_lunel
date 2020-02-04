@@ -1,4 +1,10 @@
 <script type="text/javascript">
+	//Funcion para el detalle del proyecto
+	$("[name*='btn_detalle']").click(function(){
+		id_proyecto = $(this).attr('data-id-proyecto');
+		console.log(id_equipo);
+        $('#tabla').load('proyectos/detalle_proyecto.php?id_proyecto='+id_proyecto);
+    });
 	var pass_antiguo;
 
 var agregarte = [];
@@ -573,11 +579,11 @@ console.log(len)
 	    }
     });
 
-    //Funcion para el detalle del proyecto
-	$("[name*='btn_detalle_proyecto']").click(function(){
-		id_proyecto = $(this).attr('data-id-proyecto');
-		console.log(id_equipo);
-        $('#tabla').load('proyectos/detalle_proyecto.php?id_proyecto='+id_proyecto);
+
+
+    //Funcion para retroceder Miga de pan
+    $("#miga_proyecto").click(function(){
+        $('#tabla').load('proyectos/Vproyecto.php');
     });
 
 

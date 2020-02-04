@@ -27,6 +27,22 @@ class Proyecto
         return $data;
     }
 
+    //Trae el detalle del proyecto
+    public function getDetalleProyecto($id_proyecto)
+    {
+       
+        $query  = "select id_proyecto, nombre_proyecto,nombre_tipo_equipo,count(*) as canti from proyecto
+                    LEFT join asignar on asignar.fkID_proyecto = proyecto.id_proyecto
+                    LEFT JOIN equipo on equipo.id_equipo = asignar.fkID_equipo
+                    left JOIN tipo_equipo on tipo_equipo.id_tipo_equipo = equipo.fkID_tipo_equipo
+                    WHERE id_proyecto= '" . $id_proyecto . "' group by nombre_tipo_equipo";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
     //Trae todos los permisos
     public function getPermisos($id_usuario,$id_modulo)
     {
@@ -186,6 +202,18 @@ class Proyecto
         } else {
             return false;
         }
+    }
+
+    //Trae los tipos de equipos
+    public function getTipoEquipo()
+    {
+        $query = "SELECT * FROM tipo_equipo
+                ORDER BY id_tipo_equipo";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
     }
 
 

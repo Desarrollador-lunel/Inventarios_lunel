@@ -3,6 +3,7 @@
     $idUsuario = $_SESSION['id_usuario'];
     $permisos = $proyecto->getPermisos($idUsuario,3);
     $permisoconsulta = $proyecto->getPermisosconsulta($idUsuario);
+    include "scripts_proyecto.php";
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -50,4 +51,4 @@
     </div>
 </div>
 <?php include "modal_proyecto.php";?>
-<?php include "scripts_proyecto.php";?>
+<?php ?>

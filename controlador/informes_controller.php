@@ -18,7 +18,7 @@ class informesController extends informes
         $listaProyectos = $informes->getProyectos();
         //Se recorre array de nivel 1
         if (isset($listaProyectos)) {
-            echo '<option selected value="">Todos...</option>';
+            echo '<option selected value="0">Todos...</option>';
             for ($i = 0; $i < sizeof($listaProyectos); $i++) {
                 //Valida si es el valor
                 if ($valor == $listaProyectos[$i]["id_proyecto"]) {
