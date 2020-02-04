@@ -45,8 +45,8 @@ console.log(len)
 	function agregar_campo(direccion,id,nombre) {
 		camponombre = '<div class="form-group row" id="territorial'+id+'">'+
 			'<div class="col-sm-10" >'+
-              '<label class="form-control " type="text" id="territorial' + id + '"  name="territorial' + id + '">'+nombre+'     '+direccion+'</label>'+
-              '</div>'+
+              '<label class="form-control " type="text" id="territorial' + id + '"  name="territorial' + id + '">'+nombre.toUpperCase()+'     '+direccion.toUpperCase()+'</label>'+
+              '</div>'+ 
               '<div class="col-sm-2 text-center">'+
               '<button data-id-territorial="'+id+'" type="button" class="btn btn-danger"'+
                'id="btn_eliminar_Territorial'+id+'">X</button>'+
@@ -121,7 +121,9 @@ console.log(len)
 	    .done(function(data) {
 	      console.log("vegeta")
 	      console.log(data[0]["id"]);
+	      fkID_proyecto = data[0]["id"];
 	      agrega_territoriales(data[0]["id"]);
+	      console.log(data[0]["id"])
 	      $("#modalProyecto").removeClass("show");
 	      $("#modalProyecto").removeClass("modal-backdrop");
 	      alertify.success('Creado correctamente');
@@ -161,7 +163,7 @@ console.log(len)
 						}
 					} 
 				}
-				if (cont=1) {
+				if (cont!=1) {
 					insertar_territoriales(fkID_proyecto,agregarte[i][0],agregarte[i][1]);	
 				}
 			cont=0;
@@ -170,11 +172,15 @@ console.log(len)
 
 	//Funcion para agrgar territoriales proyecto
 	function insertar_territoriales(fkID_proyecto,id_territorial,direccion){
+		console.log("proyecto "+fkID_proyecto+" territorial "+id_territorial+ " direccion "+direccion)
+		console.log(fkID_proyecto);
+		console.log(id_territorial);
+		console.log(direccion);
 	    $.ajax({
 	      url: "../controlador/ajaxProyecto.php", 
 	      data: 'fkID_territorial='+id_territorial+'&direccion_territorial='+direccion+'&fkID_proyecto='+fkID_proyecto+'&tipo=agregar_territorial',
 	      success:function(r){
-			console.log("OK");
+			console.log(r);
 		}
 	    })
 	}
@@ -560,12 +566,20 @@ console.log(len)
 		   fkID_territorial = $("#fkID_territorial2").val();
 		   var len = agregarte.length;
 			for (var i = 0; i < len; i++) {
-				if (agregarte[i][0]) {
+				if (agregarte[i][0]==fkID_territorial) {
 					alert("La territorial ya esta asignada");
 					$("#fkID_territorial2").val(0);
 				}
 	    }
     });
+
+    //Funcion para el detalle del proyecto
+	$("[name*='btn_detalle_proyecto']").click(function(){
+		id_proyecto = $(this).attr('data-id-proyecto');
+		console.log(id_equipo);
+        $('#tabla').load('proyectos/detalle_proyecto.php?id_proyecto='+id_proyecto);
+    });
+
 
 
 </script>

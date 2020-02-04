@@ -57,10 +57,10 @@ if ($tipo == 'elimina_logico') {
 };
 
 if ($tipo == 'agregar_territorial') {
-    if ($proyecto->insertaTerritorial($_GET)) {  
-        echo $r='1';
+    if ($proyecto->insertaTerritorial($_GET)) {   
+      echo $r="hola";
     } else {
-        echo $r='0';
+        echo $r=" No hola";
     }
 };
 

@@ -60,15 +60,6 @@ if ($tipo == 'consultadatos') {
     }
 };
 
-if ($tipo == 'consultaproyecto') {
-    $resultado = $usuario->consultaDatosProyecto($_GET);
-    if ($resultado) {
-        echo json_encode($resultado); //imprime el json
-    } else {
-        echo 'No se consulto'; 
-    }
-};
-
 if ($tipo == 'ultimo_empleado') {
     $resultado = $usuario->ultimoEmpleado($_GET);
     if ($resultado) {

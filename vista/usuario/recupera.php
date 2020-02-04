@@ -375,7 +375,7 @@ h3 a {
                   <td width='560' align='center' valign='top'> 
                    <table cellpadding='0' cellspacing='0' width='100%'> 
                      <tr> 
-                      <td align='center'><a target='_blank'><img class='adapt-img' src='cid:logo' alt style='display: block;' width='175' height='89' layout='responsive'></img></a></td> 
+                      <td align='center'><a target='_blank'><img class='adapt-img' src='cid:logo' alt style='display: block;' width='125' height='89' layout='responsive'></img></a></td> 
                      </tr>
                    </table></td> 
                  </tr> 

@@ -38,25 +38,30 @@
 
     $("#menu_usuarios").click(function(){
         $('#tabla').load('usuario/Vusuario.php');
+        $("#titulo").html('&nbsp;Usuarios');
     });
 
+    //Redireccion a index de equipos
     $("#menu_equipos").click(function(){
         $('#tabla').load('equipos/index.php');
+        $("#titulo").html('&nbsp;Equipos');
+    });
+
+    //Redireccion a index de funcionario
+    $("#menu_funcionario").click(function(){
+        $('#tabla').load('funcionarios/index.php');
+        $("#titulo").html('&nbsp;Funcionarios');
+    });
+
+    //Redireccion a index de informes
+    $("#menu_informes").click(function(){
+        $('#tabla').load('informes/inventario_total.php');
+        $("#titulo").html('&nbsp;Informes');
     });
 
     $("#menu_proyecto").click(function(){
         $('#tabla').load('proyectos/Vproyecto.php');
+        $("#titulo").html('&nbsp;Proyectos');
     });
-
-    $("#menu_funcionario").click(function(){
-        $('#tabla').load('funcionarios/index.php');
-    });
-
-    $("#menu_informes").click(function(){
-        $('#tabla').load('informes/inventario_total.php');
-    });  
-
-
-
 
 </script>

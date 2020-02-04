@@ -69,7 +69,7 @@ class Proyecto
     //Inserta las territoriales del proyecto
     public function insertaTerritorial($data)
     {   
-        $query  = "insert into `territorial_proyecto`(`fkID_territorial`, `direccion_territorial`, `fkID_proyecto`) VALUES ('" . $data['fkID_territorial']."','" . strtoupper($data['direccion_territorial']) ."','" . $data['fkID_proyecto'] ."')";
+        $query  = "INSERT INTO `territorial_proyecto`(`fkID_territorial`, `direccion_territorial`, `fkID_proyecto`) VALUES ('" . $data['fkID_territorial']."','" . strtoupper($data['direccion_territorial']) ."','" . $data['fkID_proyecto'] ."')";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;
@@ -167,7 +167,7 @@ class Proyecto
     public function editaTerritorial($data)
     {
         
-        $query  = "update `territorial_proyecto` SET `direccion_territorial`= '" . $data['direccion_territorial'] . "' WHERE fkId_proyecto = '" . $data['fkId_proyecto'] . "' and fkID_territorial = '" . $data['fkID_proyecto'] . "'";
+        $query  = "update `territorial_proyecto` SET `direccion_territorial`= '" . strtoupper($data['direccion_territorial']) . "' WHERE fkId_proyecto = '" . $data['fkId_proyecto'] . "' and fkID_territorial = '" . $data['fkID_proyecto'] . "'";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;

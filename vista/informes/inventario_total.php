@@ -1,10 +1,5 @@
 <?php include "scripts.php";?>
-<?php include "../../controlador/informes_controller.php";
-session_start();
-    $idUsuario = $_SESSION['id_usuario'];
-    $informe = new Informes();
-    $permisos = $informe->getPermisos($idUsuario,2);
-;?>
+<?php include "../../controlador/informes_controller.php";?>
 <?php $informes = new informesController();?>
 <div class="row">
     <div class="col-md-12">
@@ -15,8 +10,6 @@ session_start();
         </nav>
     </div>
 </div>
-<?php if ($permisos[0]["crear"]==1) {
-        ?>
 <form>
   <div class="form-group row">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Proyecto:</label>
@@ -74,8 +67,4 @@ session_start();
     </div>
   </div>
 </form>
-<?php } else{
-        echo '<tr>';
-            echo '<td colspan="9">No tienen permisos para consultar</td>';
-            echo '</tr>';
-    } ?>
+<?php include "modal_inventario_total.php";?>

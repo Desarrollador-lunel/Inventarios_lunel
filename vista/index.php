@@ -174,6 +174,7 @@
                 <div id="content">
                     <!-- Topbar -->
                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <div class="titulo" id="titulo">&nbsp;Inicio</div>
                         <!-- Sidebar Toggle (Topbar) -->
                         <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop">
                             <i class="fa fa-bars">

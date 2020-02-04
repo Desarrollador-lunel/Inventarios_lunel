@@ -7,12 +7,12 @@ function getTablaProyecto($permisos,$permisoconsulta)
 {
     $usuario = new Proyecto();
             $listaProyecto = $usuario->getProyecto($permisoconsulta);
-            if ($permisos[0]["consultar"]==1) {
+            if ($permisos[0]["consultar"]==1) { 
             if (isset($listaProyecto)) {
             for ($i = 0; $i < sizeof($listaProyecto); $i++) {
                 echo '<tr>';
-                echo '<td class="text-center" style="cursor: pointer">' . $listaProyecto[$i]["nombre_proyecto"] . '</td>';
-                echo '<td class="text-center" style="cursor: pointer">' . $listaProyecto[$i]["cantidad"] . '</td>';
+                echo '<td class="text-center detalle" id="btn_detalle_proyecto" name="btn_detalle_proyecto" title="Click Ver Detalles"  style="cursor: pointer" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["nombre_proyecto"] . '</td>';
+                echo '<td class="text-center detalle" id="btn_detalle_proyecto" name="btn_detalle_proyecto" title="Click Ver Detalles"  style="cursor: pointer" data-id-proyecto="' . $listaProyecto[$i]["id_proyecto"] . '">' . $listaProyecto[$i]["cantidad"] . '</td>';
                 if ($permisos[0]["editar"]==1 || $permisos[0]["eliminar"]==1) {
                     echo '<td class="text-center">';
                 }
