@@ -64,4 +64,9 @@
         $("#titulo").html('&nbsp;Proyectos');
     });
 
+    $("#menu_empleado").click(function(){
+        $('#tabla').load('empleados/Vempleado.php');
+        $("#titulo").html('&nbsp;Empleados');
+    });
+
 </script>

@@ -143,7 +143,7 @@
                                $vermodulo = $usuario->getVermodulo($datosusuario[0]["fkID_cargo"],13);
                                if ($vermodulo[0]['ver']==1) {
                                  ?>
-                                    <a class="collapse-item" href="utilities-color.html" style="cursor: pointer">
+                                    <a class="collapse-item" id="menu_empleado" style="cursor: pointer">
                                         Empleado
                                     </a>
                                 <?php } ?>
