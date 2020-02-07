@@ -3,7 +3,7 @@ include dirname(__file__, 2) . "/config/conexion.php";
 /**
  *
  */
-class Empleado
+class Asignacion
 {
     private $conn;
     private $link;
@@ -15,18 +15,76 @@ class Empleado
     }
 
     //Trae todos los usuario registrados
-    public function getEmpleado($permisoconsulta)
+    public function getAsignacionl($permisoconsulta)
     {
         if ($permisoconsulta[0]["fkID_cargo"]==1) {
             $url="";
         } else {
-            $url=" AND persona.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
+            $url=" AND asignar.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
         }
-        $query  = "select persona.id_persona,persona.nombres_persona,persona.apellidos_persona,proyecto.nombre_proyecto,cargo.nombre_cargo,territorial.nombre_territorial, persona.fkID_proyecto FROM `persona`
-        INNER JOIN cargo on cargo.id_cargo = persona.fkID_cargo
-        INNER JOIN territorial on territorial.id_territorial = persona.fkID_territorial
-        INNER JOIN proyecto on proyecto.id_proyecto = persona.fkID_proyecto
-        WHERE persona.estado = 1  and (cargo.id_cargo = 2 OR cargo.id_cargo = 3)". $url;
+        $query  = "select *,COUNT(*) as canti,nombre_proyecto FROM `asignar`
+                    INNER JOIN proyecto on id_proyecto = fkID_proyecto
+                    WHERE asignar.estado= 1 and fkID_tipo_movimiento=1". $url;
+                            $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los usuario registrados
+    public function getAsignaciont($permisoconsulta)
+    {
+        if ($permisoconsulta[0]["fkID_cargo"]==1) {
+            $url="";
+        } else {
+            $url=" AND asignar.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
+        }
+        $query  = "select asignar.*,nombre_proyecto,nombre_territorial,direccion_territorial,serial_equipo,concat(nombres_persona,' ',apellidos_persona) as nombres FROM `asignar`
+                INNER join equipo on id_equipo = asignar.fkID_equipo
+                INNER JOIN proyecto on id_proyecto = fkID_proyecto
+                INNER JOIN persona on id_persona = fkID_persona_recibe
+                INNER join territorial on id_territorial = persona.fkID_territorial
+                INNER JOIN territorial_proyecto on territorial_proyecto.fkID_territorial = id_territorial
+                WHERE asignar.estado= 1 and fkID_tipo_movimiento=2". $url;
+                            $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los usuario registrados
+    public function getAsignacionf($permisoconsulta)
+    {
+        if ($permisoconsulta[0]["fkID_cargo"]==1) {
+            $url="";
+        } else {
+            $url=" AND asignar.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
+        }
+        $query  = "select DISTINCT asignar.*,nombre_proyecto,nombre_territorial,direccion_territorial,serial_equipo,concat(nombres_persona,' ',apellidos_persona) as nombre_entrega,(SELECT concat(nombres_persona,' ',apellidos_persona) from persona where id_persona= fkID_persona_recibe and asignar.estado= 1 and direccion_territorial = direccion_territorial ) as nombres_recibe,nombre_cargo,nombre_area FROM `asignar`
+                INNER join equipo on id_equipo = asignar.fkID_equipo
+                INNER JOIN proyecto on id_proyecto = fkID_proyecto
+                INNER JOIN persona on id_persona = fkID_persona_entrega
+                INNER join area on id_area = persona.fkID_area
+                INNER join cargo on id_cargo = persona.fkID_cargo
+                INNER join territorial on id_territorial = persona.fkID_territorial
+                INNER JOIN territorial_proyecto on territorial_proyecto.fkID_proyecto = id_proyecto
+                WHERE asignar.estado= 1 and fkID_tipo_movimiento=1". $url;
+                            $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los permisos
+    public function getPermisosal($id_usuario,$id_modulo)
+    {
+        $query  = "select permisos.* FROM `permisos`
+                    INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo
+                    INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
+                    WHERE usuario.id_usuario='" . $id_usuario . "' and fkID_modulo ='" . $id_modulo . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -35,7 +93,21 @@ class Empleado
     }
 
     //Trae todos los permisos
-    public function getPermisos($id_usuario,$id_modulo)
+    public function getPermisosat($id_usuario,$id_modulo)
+    {
+        $query  = "select permisos.* FROM `permisos`
+                    INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo
+                    INNER JOIN usuario on usuario.fkID_persona = persona.id_persona
+                    WHERE usuario.id_usuario='" . $id_usuario . "' and fkID_modulo ='" . $id_modulo . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los permisos
+    public function getPermisosaf($id_usuario,$id_modulo)
     {
         $query  = "select permisos.* FROM `permisos`
                     INNER JOIN persona on persona.fkID_cargo = permisos.fkID_cargo

@@ -1,10 +1,5 @@
 <script type="text/javascript">
-	//Funcion para el detalle del proyecto
-	$("[name*='btn_detalle']").click(function(){
-		id_proyecto = $(this).attr('data-id-proyecto');
-		console.log(id_equipo);
-        $('#tabla').load('proyectos/detalle_proyecto.php?id_proyecto='+id_proyecto);
-    });
+
 	var pass_antiguo;
 
 var agregarte = [];
@@ -12,7 +7,14 @@ var cargarterri = [];
 //agregarte.push(['Study',2]);
 var len = agregarte.length;
 //console.log(agregarte[5][1]); // 9
-console.log(len)
+console.log(len);
+
+	//Funcion para el detalle del proyecto
+	$("[name*='btn_detalle']").click(function(){
+		id_proyecto = $(this).attr('data-id-proyecto');
+		console.log(id_equipo);
+        $('#tabla').load('proyectos/detalle_proyecto.php?id_proyecto='+id_proyecto);
+    });
 
 	//Funcion abrir formulario de empleado
 	$("#btnadicionproyecto").click(function(){
@@ -103,14 +105,13 @@ console.log(len)
 	      dataType: 'json',
 	     success:function(data){
 	     	console.log("vegeta")
-	      console.log(data[0]["id"]);
 	      proyecto = $("#id_proyecto").val();
 	      console.log(proyecto)
 	      edita_territoriales(proyecto);
-	      //$("#modalProyecto").removeClass("show");
-	      //$("#modalProyecto").removeClass("modal-backdrop");
-	      //alertify.success('Actualizado correctamente');
-		  //setTimeout('cargar_sitio()',1000);
+	      $("#modalProyecto").removeClass("show");
+	      $("#modalProyecto").removeClass("modal-backdrop");
+	      alertify.success('Actualizado correctamente');
+		  setTimeout('cargar_sitio()',1000);
 
 		}
 	})

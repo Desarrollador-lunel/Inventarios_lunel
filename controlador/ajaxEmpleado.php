@@ -64,9 +64,9 @@ if ($tipo == 'consultaproyectos') {
 
 if ($tipo == 'edita') {
     if ($empleado->editaEmpleado($_GET)) {
-        echo $r='1';
+        echo $r="1";
     } else {
-        echo $r='0';
+        echo $r="0";
     }
 };
 
@@ -77,4 +77,30 @@ if ($tipo == 'elimina_logico') {
         return '0';
     }
 };
+
+if ($tipo == 'valida_territorial') {
+    $resultado = $empleado->validaTerritorial($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
+    }
+}
+
+if ($tipo == 'inserta_territorial') {
+    if ($empleado->creaTerritorial($_GET)) {
+        return 'Guardo';
+    } else {
+        return 'No se guardo';
+    }
+}
+
+if ($tipo == 'ultima_territorial') {
+    $resultado = $empleado->ultimaTerritorial($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
+    }
+}  
 

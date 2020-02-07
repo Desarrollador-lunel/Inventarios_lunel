@@ -69,4 +69,9 @@
         $("#titulo").html('&nbsp;Empleados');
     });
 
+    $("#menu_asignacion").click(function(){
+        $('#tabla').load('asignacion/Vasignacion.php');
+        $("#titulo").html('&nbsp;Asignación');
+    });
+
 </script>

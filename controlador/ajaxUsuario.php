@@ -118,3 +118,29 @@ if ($tipo == 'cerrar_sesion') {
     session_destroy();
     echo "si";
 };
+
+if ($tipo == 'valida_territorial') {
+    $resultado = $usuario->validaTerritorial($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
+    }
+}
+
+if ($tipo == 'inserta_territorial') {
+    if ($usuario->creaTerritorial($_GET)) {
+        return 'Guardo';
+    } else {
+        return 'No se guardo';
+    }
+}
+
+if ($tipo == 'ultima_territorial') {
+    $resultado = $usuario->ultimaTerritorial($_GET);
+    if ($resultado) {
+        echo json_encode($resultado); //imprime el json
+    } else {
+        return 'No se consulto';
+    }
+}

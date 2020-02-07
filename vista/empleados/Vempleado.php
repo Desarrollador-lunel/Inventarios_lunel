@@ -60,4 +60,5 @@
     </div>
 </div>
 <?php include "modal_empleado.php";?>
-<?php ?>
+<?php include "modal_proyecto.php";?>
+<?php include "modal_territorial.php";?>

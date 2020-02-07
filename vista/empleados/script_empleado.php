@@ -6,10 +6,17 @@ var agregarte = [];
 var len = agregarte.length;
 //console.log(agregarte[5][1]); // 9
 console.log(len)
+
+//Funcion para el detalle de equipo
+	$("[name*='btn_detalle']").click(function(){
+		id_empleado = $(this).attr('data-id-empleado');
+		console.log(id_empleado);
+        $('#tabla').load('empleados/detalle_empleado.php?id_empleado='+id_empleado);
+    });
     //Funcion boton crear Usuario
 	$("#btn_crear_empleado").click(function(){
 		$("#modalEmpleadoLabel").text("Crear Empleado");
-		$("#btn_guardar_Empleado").attr("data-accion","crear");
+		$("#btn_guardar_Empleado").attr("data-accion","crear"); 
 		$("#form_Empleado")[0].reset();
 		$("#fkID_territorial").prop('disabled', true);
         $("#fkID_proyecto").prop('disabled', true);
@@ -129,6 +136,7 @@ console.log(len)
 	//Funcion para guardar el Usuario
 	function edita_empleado(){
 		id_persona = $("#id_persona").val();
+		console.log("el id es "+id_persona)
 	 	nombres_persona = $("#nombres_persona").val();
 	 	apellidos_persona = $("#apellidos_persona").val();
 	 	documento_persona = $("#documento_persona").val();
@@ -142,8 +150,12 @@ console.log(len)
 	      url: "../controlador/ajaxEmpleado.php",
 	      data: 'id_persona='+id_persona+'&nombres_persona='+  nombres_persona +'&apellidos_persona='+  apellidos_persona + '&documento_persona='+ documento_persona + '&telefono_persona='+ telefono_persona + '&celular_persona='+ celular_persona + '&email_persona='+ email_persona + '&fkID_cargo='+ fkID_cargo + '&fkID_proyecto='+ fkID_proyecto + '&fkID_territorial='+ fkID_territorial + '&tipo=edita',
 	     success:function(r){
+	     	if (r==1) {
 			alertify.success('Editado correctamente');
 		  	setTimeout('cargar_sitio()',1000);
+		  } else {
+		  	console.log(r)
+		  }
 		}
 	})
 	}
@@ -508,6 +520,90 @@ console.log(len)
     }
   }
 
+  //Funcion guardar territorial
+	$("#btn_guardar_territorial").click(function(){
+		validar_territorial();
+		return false;
+	});
+
+	//Funcion para validar modelo
+	function validar_territorial(){ 
+	 	nombre_territorial = $("#nombre_territorial").val();
+
+	    $.ajax({
+	      url: "../controlador/ajaxEmpleado.php",
+	      data: 'nombre_territorial='+nombre_territorial+'&tipo=valida_territorial',
+	      dataType: 'json'
+	    })
+	    .done(function(data) {
+	      //---------------------
+	      if(data[0]["cantidad"] >0){
+	      	alert('La territorial ya esta registrada');
+	      	$("#nombre_territorial").val("");
+	      	$("#nombre_territorial").focus();
+	      } else {
+	      	crea_territorial();
+	      }
+	    })
+	    .fail(function(data) {
+	      console.log(data);
+	    });
+	}
+
+	//Funcion para guardar el marca
+	function crea_territorial(){
+	 	nombre_territorial = $("#nombre_territorial").val();
+
+	    $.ajax({
+	      url: "../controlador/ajaxEmpleado.php",
+	      data: 'nombre_territorial='+nombre_territorial+'&tipo=inserta_territorial'
+	    })
+	    .done(function(data) {
+	      //---------------------
+	      console.log(data);
+	      $("#modalTerritorial").removeClass("show");
+	      $("#modalTerritorial").removeClass("modal-backdrop");
+	      carga_territorial();
+	      $("#nombre_territorial").val("");
+	    })
+	    .fail(function(data) {
+	      console.log(data);
+	    })
+	     always(function(data) {
+	      console.log("ok");
+	    });
+	}
+
+	//Funcion para cargar el registro guardado
+	function carga_territorial(){
+
+	    $.ajax({
+	        url: "../controlador/ajaxEmpleado.php",
+	        data: "tipo=ultima_territorial",
+	        dataType: 'json'
+	    })
+	    .done(function(data) {
+
+	        $.each(data[0], function( key, value ) {
+	          	console.log(key+"--"+value);
+	          	if(key == "id_territorial"){
+	          		optionValue = value;
+	          	}
+	          	if(key == "nombre_territorial")
+            		optionText = value;
+	        });
+	        $('#fkID_territorial2').append(new Option(optionText, optionValue));
+	        $('#fkID_territorial2').val(optionValue);
+	        alert('Guardada la territorial');
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    });
+	};
+
 
 
 	//Funcion para el Datatable
@@ -559,6 +655,11 @@ console.log(len)
 	    	return true;
 	    }	    
 	}
+
+	 //Funcion para retroceder Miga de pan
+    $("#miga_empleado").click(function(){
+        $('#tabla').load('empleados/Vempleado.php');
+    });
 
 
 </script>

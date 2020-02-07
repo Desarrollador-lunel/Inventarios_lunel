@@ -195,7 +195,7 @@ class Proyecto
     //Edita territorial del proyecto
     public function editaProyecto($data)
     {
-        $query  = "update `proyecto` SET `nombre_proyecto`= '" . $data['nombre_proyecto'] . "' WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
+        $query  = "update `proyecto` SET `nombre_proyecto`= '" . strtoupper($data['nombre_proyecto']) . "' WHERE id_proyecto = '" . $data['id_proyecto'] . "'";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;

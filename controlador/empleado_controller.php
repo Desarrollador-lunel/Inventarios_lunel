@@ -62,4 +62,25 @@ function getSelectCargo()
             }
         }
     }  
+
+function getSelectTerritorial()
+    {
+        //Instancia del equipo
+        $empleado = new Empleado();
+        //Lista del menu Nivel 1
+        $listaTerritorial = $empleado->getTerritoriales();
+        //Se recorre array de nivel 1
+        if (isset($listaTerritorial)) {
+            echo '<option selected value="0">Seleccione...</option>';
+            for ($i = 0; $i < sizeof($listaTerritorial); $i++) {
+                //Valida si es el valor
+                if ($valor == $listaTerritorial[$i]["id_territorial"]) {
+                    $seleccionado = "selected";
+                } else {
+                    $seleccionado = "";
+                }
+                echo '<option value="' . $listaTerritorial[$i]["id_territorial"] . '" ' . $seleccionado . '>' . $listaTerritorial[$i]["nombre_territorial"] . '</option>';
+            }
+        }
+    } 
  

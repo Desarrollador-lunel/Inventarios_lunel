@@ -86,7 +86,7 @@
                         ?>
                         <!-- Nav Item - Pages Collapse Menu -->
                         <li class="nav-item">
-                            <a class="nav-link" style="cursor: pointer">
+                            <a class="nav-link" id="menu_asignacion" style="cursor: pointer">
                                 <i class="fas fa-user-check">
                                 </i>
                                 <span>

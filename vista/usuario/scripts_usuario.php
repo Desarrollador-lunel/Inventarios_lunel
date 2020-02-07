@@ -633,6 +633,90 @@ console.log(len)
     }
   }
 
+  //Funcion guardar territorial
+	$("#btn_guardar_territorial").click(function(){
+		validar_territorial();
+		return false;
+	});
+
+  //Funcion para validar modelo
+	function validar_territorial(){ 
+	 	nombre_territorial = $("#nombre_territorial").val();
+
+	    $.ajax({
+	      url: "../controlador/ajaxUsuario.php",
+	      data: 'nombre_territorial='+nombre_territorial+'&tipo=valida_territorial',
+	      dataType: 'json'
+	    })
+	    .done(function(data) {
+	      //---------------------
+	      if(data[0]["cantidad"] >0){
+	      	alert('La territorial ya esta registrada');
+	      	$("#nombre_territorial").val("");
+	      	$("#nombre_territorial").focus();
+	      } else {
+	      	crea_territorial();
+	      }
+	    })
+	    .fail(function(data) {
+	      console.log(data);
+	    });
+	}
+
+	//Funcion para guardar el marca
+	function crea_territorial(){
+	 	nombre_territorial = $("#nombre_territorial").val();
+
+	    $.ajax({
+	      url: "../controlador/ajaxUsuario.php",
+	      data: 'nombre_territorial='+nombre_territorial+'&tipo=inserta_territorial'
+	    })
+	    .done(function(data) {
+	      //---------------------
+	      console.log(data);
+	      $("#modalTerritorial").removeClass("show");
+	      $("#modalTerritorial").removeClass("modal-backdrop");
+	      carga_territorial();
+	      $("#nombre_territorial").val("");
+	    })
+	    .fail(function(data) {
+	      console.log(data);
+	    })
+	     always(function(data) {
+	      console.log("ok");
+	    });
+	}
+
+	//Funcion para cargar el registro guardado
+	function carga_territorial(){
+
+	    $.ajax({
+	        url: "../controlador/ajaxUsuario.php",
+	        data: "tipo=ultima_territorial",
+	        dataType: 'json'
+	    })
+	    .done(function(data) {
+
+	        $.each(data[0], function( key, value ) {
+	          	console.log(key+"--"+value);
+	          	if(key == "id_territorial"){
+	          		optionValue = value;
+	          	}
+	          	if(key == "nombre_territorial")
+            		optionText = value;
+	        });
+	        $('#fkID_territorial2').append(new Option(optionText, optionValue));
+	        $('#fkID_territorial2').val(optionValue);
+	        alert('Guardada la territorial');
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    });
+	};
+
 
 
 	//Funcion para el Datatable

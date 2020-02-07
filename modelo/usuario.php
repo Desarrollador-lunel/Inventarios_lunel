@@ -376,4 +376,40 @@ class Usuario
         }
     }
 
+    //Valida la territorial
+    public function validaTerritorial($data)
+    {
+        $query  = "SELECT COUNT(*) AS cantidad FROM `territorial` WHERE nombre_territorial =  '" . $data['nombre_territorial'] . "' AND estado = 1";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Crea una nueva territorial
+    public function creaTerritorial($data)
+    {
+        //Pasa el nombre a mayusculas
+        $nombre = strtoupper($data['nombre_territorial']);
+        $query  = "INSERT INTO territorial (nombre_territorial) VALUES ('" . $nombre . "')";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Consulta el ultimo ID de territorial
+    public function ultimaTerritorial()
+    {
+        $query  = "SELECT id_territorial,nombre_territorial FROM `territorial` ORDER BY `territorial`.`id_territorial` DESC LIMIT 1";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
 }
