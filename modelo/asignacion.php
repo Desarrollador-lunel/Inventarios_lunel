@@ -1,5 +1,5 @@
-<?php
-include dirname(__file__, 2) . "/config/conexion.php";
+<?php 
+include dirname(__file__, 2) . "/config/conexion.php"; 
 /**
  *
  */
@@ -134,9 +134,9 @@ class Asignacion
     }
 
     //Consulta el ultimo ID de empleado
-    public function ultimoEmpleado()
+    public function validacionserial($serial)
     {
-        $query  = "select id_persona,CONCAT(documento_persona,' - ',  nombres_persona,' ', apellidos_persona) As persona FROM `persona` ORDER BY `id_persona` DESC LIMIT 1";
+        $query  = "select COUNT(*) as canti FROM `equipo` WHERE estado =1 and serial_equipo ='" . $serial . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -144,16 +144,14 @@ class Asignacion
         return $data;
     }
 
-    //Crea un nuevo empleado
-    public function insertaEmpleado($data)
-    {   
-        $query  = "insert into `persona`(`nombres_persona`, `apellidos_persona`, `documento_persona`, `telefono_persona`, `celular_persona`, `email_persona`, `fkID_proyecto`, `fkID_territorial`, `fkID_cetap`, `fkID_cargo`, `fkID_area`, `fkID_tipo_persona`) VALUES ('" . strtoupper($data['nombres_persona']) . "','" . strtoupper($data['apellidos_persona']) ."', '" . strtoupper($data['documento_persona']) ."','" . strtoupper($data['telefono_persona']) ."','" . $data['celular_persona'] ."','" . strtoupper($data['email_persona']) ."','" . $data['fkID_proyecto'] ."','" . $data['fkID_territorial'] ."', 1 ,'" . $data['fkID_cargo'] ."',1,1)";
+    public function validacionultimaasignacion()
+    {
+        $query  = "select MAX(id_asignar) AS id FROM asignar where estado=1";
         $result = mysqli_query($this->link, $query);
-        if (mysqli_affected_rows($this->link) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
     }
 
     //Crea un nuevo empleado
@@ -214,12 +212,20 @@ class Asignacion
     }
 
     //Trae las territoriales
-    public function getTerritorial($data)
+    public function getTipoequipo()
     {
-        $query  = "select id_territorial,nombre_territorial FROM `territorial_proyecto` 
-                    INNER join territorial on id_territorial=fkID_territorial
-                    INNER JOIN proyecto on id_proyecto=fkID_proyecto
-                    WHERE territorial_proyecto.estado=1 and id_proyecto= '" . $data['id_territorial'] . "'";
+        $query  = "select * FROM `tipo_equipo` WHERE estado=1 ";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae las territoriales
+    public function getSerial()
+    {
+        $query  = "select id_equipo,serial_equipo FROM `equipo` WHERE estado=1 ";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));

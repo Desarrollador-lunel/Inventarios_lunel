@@ -42,6 +42,11 @@ $id_proyecto = $_GET["id_proyecto"];
                 <?php getTablaDetalleProyecto($id_proyecto);?>
             </tbody>
         </table>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btn_imprimir"><i class="fas fa-print"></i></button>
+        <button type="button" class="btn btn-success" id="btn_excel"><i class="fas fa-file-excel"></i></button>
+        <button type="button" class="btn btn-danger" id="btn_pdf"><i class="far fa-file-pdf"></i></button>
+        </div>
     </div>
 </div>
 		</div>
@@ -76,6 +81,11 @@ $id_proyecto = $_GET["id_proyecto"];
                 <?php getTablaDetalleProyecto($id_proyecto);?>
             </tbody>
         </table>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btn_imprimir"><i class="fas fa-print"></i></button>
+        <button type="button" class="btn btn-success" id="btn_excel"><i class="fas fa-file-excel"></i></button>
+        <button type="button" class="btn btn-danger" id="btn_pdf"><i class="far fa-file-pdf"></i></button>
+        </div>
     </div>
 </div>
 		</div>

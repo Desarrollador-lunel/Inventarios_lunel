@@ -1,4 +1,4 @@
-<?php
+<?php 
 include dirname(__file__, 2) . '../modelo/asignacion.php';
 $asignacion = new Asignacion();
 
@@ -120,7 +120,48 @@ function getTablaAsignacionf($permisos,$permisoconsulta)
             echo '<tr>';
             echo '<td colspan="9">No tienen permisos para consultar</td>';
             echo '</tr>';
-        }
-                    
+        }                  
 }
+
+function getTiposEquipos()
+    {
+        //Instancia del equipo
+        $asignarl = new Asignacion();
+        //Lista del menu Nivel 1
+        $listaTipoEquipo = $asignarl->getTipoequipo();
+        //Se recorre array de nivel 1
+        if (isset($listaTipoEquipo)) {
+            for ($i = 0; $i < sizeof($listaTipoEquipo); $i++) {
+                
+                echo '<div class="col-sm-1">';
+                echo '<input class="form-control" type="checkbox" id="checkboxasigl" name="checkboxasigl" value="' . $listaTipoEquipo[$i]["id_tipo_equipo"] . '">';
+                echo '</div>';
+                echo '<div class="col-sm-3">';
+                echo' <label class="col-form-label">' . $listaTipoEquipo[$i]["nombre_tipo_equipo"] . '</label>';  
+                echo '</div>';
+            }
+        }
+    } 
+
+function getTiposEquipos2()
+    {
+        //Instancia del equipo
+        $asignarl = new Asignacion();
+        //Lista del menu Nivel 1
+        $listaTipoEquipo = $asignarl->getSerial();
+        //Se recorre array de nivel 1
+        if (isset($listaTipoEquipo)) {
+            for ($i = 0; $i < sizeof($listaTipoEquipo); $i++) {
+                
+                echo '<div class="col-sm-2">';
+                echo '<input class="form-control" type="checkbox" id="checkboxasigl" name="checkboxasigl" value="' . $listaTipoEquipo[$i]["id_equipo"] . '">';
+                echo '</div>';
+                echo '<div class="col-sm-4">';
+                echo' <label class="col-form-label">' . $listaTipoEquipo[$i]["serial_equipo"] . '</label>';  
+                echo '</div>';
+            }
+        }
+    } 
+
+
   
