@@ -163,5 +163,36 @@ function getTiposEquipos2()
         }
     } 
 
+function getSelectProyecto()
+    {
+        //Instancia del equipo
+        $asignacion = new Asignacion();
+        //Lista del menu Nivel 1
+        $listaProyecto = $asignacion->getProyecto();
+        //Se recorre array de nivel 1
+        if (isset($listaProyecto)) {
+            echo '<option selected value="0">Seleccione...</option>';
+            for ($i = 0; $i < sizeof($listaProyecto); $i++) {
+                //Valida si es el valor
+                echo '<option value="' . $listaProyecto[$i]["id_proyecto"] . '">' . utf8_encode($listaProyecto[$i]["nombre_proyecto"]) . '</option>';
+            }
+        }
+    }
+
+function getSelectPersona()
+    {
+        //Instancia del equipo
+        $asignacion = new Asignacion();
+        //Lista del menu Nivel 1
+        $listaPersona = $asignacion->getPersona();
+        //Se recorre array de nivel 1
+        if (isset($listaPersona)) {
+            echo '<option selected value="0">Seleccione...</option>';
+            for ($i = 0; $i < sizeof($listaPersona); $i++) {
+                echo '<option value="' . $listaPersona[$i]["id_persona"] . '">' . utf8_encode($listaPersona[$i]["persona"]) . '</option>';
+            }
+        }
+    }  
+
 
   

@@ -1,10 +1,12 @@
  <?php  
-  require '../librerias/PHPExcel/IOFactory.php'; 
+  include '../librerias/Excel/PHPExcel/IOFactory.php'; 
   include dirname(__file__, 2) . '/modelo/asignacion.php';
   $asignacion = new Asignacion();
   $mensajeserial="";
+  $mensaje="";
+  $consecutivo="";
   $tipo  = isset($_POST['tipo'])? $_POST['tipo'] : "";
-  $tipo  =  isset($_GET['tipo'])?$_GET['tipo']:"";
+  //$tipo  =  isset($_GET['tipo'])?$_GET['tipo']:"";
   $id      = isset($_POST['pkID'])? $_POST['pkID'] : ""; 
   $fecha_asignacion  = isset($_POST['fecha_asignacion'])? $_POST['fecha_asignacion'] : "";
   $fkID_tipo_movimiento  = isset($_POST['fkID_tipo_movimiento'])? $_POST['fkID_tipo_movimiento'] : "";
@@ -18,28 +20,24 @@
              $nombre =$_FILES['file']["name"];
         }
         $arrayString = explode(".", $nombre); //array(archivo1, xls) para dividir nombre
-		$extension = end($arrayString); //xls, toma la extensión
+		    $extension = end($arrayString); //xls, toma la extensión
 
-		if($extension != "xls" || $extension != "xlsx" ){
-		  echo "No es valido";
-		}else{
-			if ($empleado->insertar_asignacionl($fecha_asignacion,$fkID_tipo_movimiento,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_proyecto,$observacion)){;
+		if($extension == "xls" || $extension == "xlsx" ){
+      //echo "Es valido";
+      if ($asignacion->insertaasignacionl($fecha_asignacion,1,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_proyecto,$observacion)){;
             $fkID_asignacion = validar_ultima_asignacion();
-		        $destino = "../server/php/Carga_temporal/" . $nombre;  
+            $destino = "../server/php/Carga_temporal/" . $nombre;  
             if(move_uploaded_file($_FILES['file']["tmp_name"], $destino)) {        
                 Leer_archivo($destino,$fkID_asignacion);              
             }
+          } else {
+            echo "no inserto";
           }
-		}
-            
+		}else{
+			echo $extension;
+		} 
+    echo $mensajeserial;
     };
-
-    function insertar_asignacionl($fecha_asignacion,$fkID_tipo_movimiento,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_proyecto,$observacion){
-    	if ($asignacion->insertaasignacionl($fecha_asignacion,1,$fkID_tipo_movimiento,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_proyecto,$observacion)) {  
-	    } else {
-	        echo $r='0';
-	    }
-    }
 
 
     function Leer_archivo($destino,$fkID_asignacion){
@@ -58,38 +56,37 @@
     }
 
     function validar_ultima_asignacion()
-    {
+    {  
+      $asignacion = new Asignacion();
       $resultado = $asignacion->validacionultimaasignacion();
       if ($resultado) {
-          $fila= mysql_fetch_array ($resultado);
-          return $fila["id"];
+          return $resultado[0]["id"];
       } else {
           return 'No se consulto';
       }
     }
 
     function validacion_serial($serial,$fkID_asignacion)
-    {
+    { 
+      GLOBAL $fkID_persona_entrega, $fecha_asignacion, $fkID_persona_recibe,$mensajeserial;
+      $asignacion = new Asignacion();
       $resultado = $asignacion->validacionserial($serial);
       if ($resultado) {
-          $fila= mysql_fetch_array ($resultado);
-          if ($fila["canti"]>0) {
-             if ($equipo->insertaEquipo($_GET)) {
-                if ($equipo->insertaInventario($_GET)) {
-                    if ($equipo->insertaHistorico($_GET)) {
-                        return 'Se guardo';
+          if ($resultado[0]["canti"]>0) {
+             if ($asignacion->insertaEquipoasignacion($resultado[0]["id_equipo"],$fkID_asignacion)) {
+                    if ($asignacion->insertaHistorico($resultado[0]["id_equipo"],$fkID_persona_entrega,$fkID_persona_recibe,$fkID_asignacion,$fecha_asignacion)) {
+                        $mensaje= "listo";
                     }
-                }
             } else {
-                return 'No se guardo';
+                $mensaje= "fallo";
             }
           } else {
-            $mensajeserial = $mensajeserial . ", " . $serial;
+            $mensajeserial = $mensajeserial . $serial . ",  ";
           }
           
-          echo json_encode($resultado); //imprime el json
+         // echo json_encode($resultado); //imprime el json
       } else {
-          return 'No se consulto';
+          $mensaje= "fallo";
       }
     }
 

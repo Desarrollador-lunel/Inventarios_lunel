@@ -1,6 +1,6 @@
   <!-- Modal --> 
 <div class="modal fade" id="modalAsignacionl" tabindex="-1" role="dialog" aria-labelledby="modalAsignacionlLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document">  
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalAsignacionlLabel">Crear Asignación por lote</h5>
@@ -29,7 +29,7 @@
 		            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Proyecto:</label>
 		            <div class="col-sm-8">
 		              <select class="form-control" id="fkID_proyectola"  required>
-		                <option selected value="0">Seleccione</option>
+		                <?php getSelectProyecto();?>
 		              </select>
 		            </div>
 		          </div>
@@ -37,9 +37,9 @@
 		            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Coordinador:</label>
 		            <div class="col-sm-8">
 		              <select class="form-control" id="fkID_persona_recibela"  required>
-		                <option selected value="0">Seleccione..</option>
+		                <?php getSelectPersona();?>
 		              </select>
-		            </div>
+		            </div>  
 		          </div>
 		          <div class="form-group row">
 		            <label for="dateAsignacionl" class="col-sm-4 col-form-label text-right">Fecha asignación:</label>
@@ -85,12 +85,12 @@
           </div>
           <div id="manual">
           <form id="form_Asignacionl">
-          <input type="hidden" id="id_Asignacionl"> 
+          <input type="hidden" id="id_Asignacionl">  
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Proyecto:</label>
             <div class="col-sm-7">
               <select class="form-control" id="fkID_proyecto"  required>
-                <option selected value="0">Seleccione</option>
+                <?php getSelectProyecto();?>
               </select>
             </div>
             <div class="col-sm-2 text-danger">

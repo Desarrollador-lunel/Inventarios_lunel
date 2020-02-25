@@ -21,21 +21,23 @@
 	//Funcion para crear proyecto
 	function crea_asignacionla(){
 		var data = new FormData();
-		data.append('fecha_asignacion', $("#fecha_asignacionl").val());
+		data.append('fecha_asignacion', $("#fecha_asignacionla").val());
         data.append('file', $("#archivo_asignacionl").get(0).files[0]);
-        data.append('fkID_persona_entrega', $("#fkID_persona_entregal").val());
-        data.append('fkID_persona_recibe', $("#fkID_persona_recibel").val());
-        data.append('fkID_proyecto', $("#fkID_proyectol").val());
+        data.append('fkID_persona_entrega', $("#fkID_persona_entregala").val());
+        data.append('fkID_persona_recibe', $("#fkID_persona_recibela").val());
+        data.append('fkID_proyecto', $("#fkID_proyectola").val());
         data.append('observacion', $("#observacionl").val());
         data.append('tipo', "crearasignacionla");
 	    $.ajax({
             type: "POST",
-            url: "../../controlador/ajaxAsignacion.php",
+            url: "../controlador/ajaxAsignacion.php",
             data: data,
             contentType: false,
             processData: false,
             success: function(a) {  
                 console.log(a);
+                alert('Los siguientes seriales no fueron asignados debido a que no se encuentran en sistema '+a);
+                alert('Se a generado el acta de asignación para ser verificada y firmada');
                 //location.reload();
             }
         })

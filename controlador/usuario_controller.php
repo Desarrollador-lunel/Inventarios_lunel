@@ -107,7 +107,7 @@ function getSelectPersona()
                 echo '<option value="' . $listaPersona[$i]["id_persona"] . '" ' . $seleccionado . '>' . utf8_encode($listaPersona[$i]["persona"]) . '</option>';
             }
         }
-    }
+    }   
 
 function getSelectProyecto()
     {

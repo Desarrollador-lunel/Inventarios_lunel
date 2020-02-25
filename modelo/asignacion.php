@@ -7,6 +7,7 @@ class Asignacion
 {
     private $conn;
     private $link;
+    public $consecutivo;
 
     public function __construct()
     {
@@ -136,7 +137,7 @@ class Asignacion
     //Consulta el ultimo ID de empleado
     public function validacionserial($serial)
     {
-        $query  = "select COUNT(*) as canti FROM `equipo` WHERE estado =1 and serial_equipo ='" . $serial . "'";
+        $query  = "select id_equipo, COUNT(*) as canti FROM `equipo` WHERE estado =1 and serial_equipo ='" . $serial . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -155,9 +156,24 @@ class Asignacion
     }
 
     //Crea un nuevo empleado
-    public function insertaProyecto($data)
+    public function insertaEquipoasignacion($fkID_equipo,$fkID_asignacion)
     {   
-        $query  = "insert into `proyecto`(`nombre_proyecto`) VALUES ('" . strtoupper($data['nombre_proyecto'])."')";
+        $query  = "insert into `asignacion_equipo`(`fkID_asignación`, `fkID_equipo`) VALUES ('" . $fkID_asignacion."', '" . $fkID_equipo. "')";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Inserta en historico
+    public function insertaHistorico($fkID_equipo,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_asignacion,$fecha_asignacion)
+    {
+        $movimiento = $this->getConsultar_consecutivo($fkID_asignacion);
+        $consecutivo = $movimiento[0]["consecutivo_asignar"] ;
+        
+        $query  = "INSERT INTO historico_equipo (fkID_equipo,fkID_persona_entrega,fkID_persona_recibe,fecha_historico_equipo,fkID_tipo_movimiento,conse_historico_equipo,obs_historico_equipo) VALUES ('" . $fkID_equipo . "','" . $fkID_persona_entrega . "','" . $fkID_persona_recibe . "','" . $fecha_asignacion . "','1','" . $consecutivo . "','ASIGNACIÓN POR LOTE DEL EQUIPO')";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;
@@ -167,9 +183,15 @@ class Asignacion
     }
 
     //Crea una nueva territorial 
-    public function insertaTerritorial($data)
+    public function insertaasignacionl($fecha_asignacion,$fkID_tipo_movimiento,$fkID_persona_entrega,$fkID_persona_recibe,$fkID_proyecto,$observacion)
     {   
-        $query  = "insert into `territorial_proyecto`(`fkID_territorial`, `direccion_territorial`, `fkID_proyecto`) VALUES ('" . $data['fkID_territorial']."','" . strtoupper($data['direccion_territorial']) ."','" . $data['fkID_proyecto'] ."')";
+        $movimiento = $this->getConsecutivo(1);
+        //Armar el consecutivo
+        $contador    = $movimiento[0]["conse_tipo_movimiento"] + 1;
+        $consecutivo = $movimiento[0]["inicial_tipo_movimiento"] . '-' . $contador;
+        //Suma 1 al tipo de movimiento
+        $this->sumaConsecutivo($contador, 1);
+        $query  = "insert into `asignar`(`consecutivo_asignar`, `fecha_asignacion`, `fkID_tipo_movimiento`, `fkID_persona_entrega`, `fkID_persona_recibe`, `fkID_proyecto`, `observacion`) VALUES ('" . $consecutivo."','" . strtoupper($fecha_asignacion) ."','" . $fkID_tipo_movimiento ."','" . $fkID_persona_entrega ."','" . $fkID_persona_recibe ."','" . $fkID_proyecto ."','" . $observacion ."')";
         $result = mysqli_query($this->link, $query);
         if (mysqli_affected_rows($this->link) > 0) {
             return true;
@@ -178,10 +200,33 @@ class Asignacion
         }
     }
 
-    //Traer un usuario registrados
-    public function consultaidProyecto($data)
+    //Arma el consecutivo
+    public function getConsecutivo($fkID_tipo_movimiento)
     {
-        $query  = "select MAX(id_proyecto) AS id FROM proyecto where estado=1";
+        $query  = "SELECT * FROM `tipo_movimiento` WHERE id_tipo_movimiento =  '" . $fkID_tipo_movimiento . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Suma 1 al consecutivo
+    public function sumaConsecutivo($valor, $id_tipo_movimiento)
+    {
+        $query  = "UPDATE tipo_movimiento SET conse_tipo_movimiento = '" . $valor . "' WHERE id_tipo_movimiento = '" . $id_tipo_movimiento . "'";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Consultar consecutivo
+    public function getConsultar_consecutivo($fkID_asignacion)
+    {
+        $query  = "select id_asignar,consecutivo_asignar FROM `asignar` WHERE id_asignar ='" . $fkID_asignacion . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -201,7 +246,7 @@ class Asignacion
     }
 
     //Trae los proyectos
-    public function getProyecto($data)
+    public function getProyecto()
     {
         $query  = "select * FROM `proyecto` WHERE estado=1";
         $result = mysqli_query($this->link, $query);
