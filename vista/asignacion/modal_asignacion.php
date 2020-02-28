@@ -62,7 +62,7 @@
 		          <div class="form-group row">
 		            <label for="dateAsignacionl" class="col-sm-4 col-form-label text-right">Adjuntar archivo:</label>
 		            <div class="col-sm-8">
-		              <input class="form-control" type="file" id="archivo_asignacionl" required="true">
+		              <input class="form-control" type="file" id="archivo_asignacionl" name="archivo_asignacionl" required="true"  accept="application/vnd.ms-excel/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 		            </div> 
 		          </div>
 		          <div class="form-group row">

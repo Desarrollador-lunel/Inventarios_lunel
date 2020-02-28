@@ -23,9 +23,9 @@ class Asignacion
         } else {
             $url=" AND asignar.fkID_proyecto= '" . $permisoconsulta[0]['fkID_proyecto'] . "'";
         }
-        $query  = "select *,COUNT(*) as canti,nombre_proyecto FROM `asignar`
-                    INNER JOIN proyecto on id_proyecto = fkID_proyecto
-                    WHERE asignar.estado= 1 and fkID_tipo_movimiento=1". $url;
+        $query  = "select asignar.*,(select COUNT(*) from asignacion_equipo WHERE asignacion_equipo.estado=1 and asignacion_equipo.fkID_asignación=id_asignar) as canti,nombre_proyecto FROM `asignar`
+            INNER JOIN proyecto on id_proyecto = fkID_proyecto
+            WHERE asignar.estado= 1 and proyecto.estado=1 and fkID_tipo_movimiento=1". $url;
                             $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));
@@ -134,7 +134,7 @@ class Asignacion
         return $data;
     }
 
-    //Consulta el ultimo ID de empleado
+    //Valida que el serial exista
     public function validacionserial($serial)
     {
         $query  = "select id_equipo, COUNT(*) as canti FROM `equipo` WHERE estado =1 and serial_equipo ='" . $serial . "'";
@@ -143,6 +143,42 @@ class Asignacion
         while ($data[] = mysqli_fetch_assoc($result));
         array_pop($data);
         return $data;
+    }
+
+    //Valida que el serial no este asignado
+    public function validacionserialasignado($serial)
+    {
+        $query  = "select COUNT(*) as cantidad FROM `equipo`
+                    INNER JOIN asignacion_equipo on fkID_equipo=id_equipo
+                    WHERE asignacion_equipo.estado =1 and fkID_equipo='" . $serial . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Valida si la asignacion tiene equipos asignados 
+    public function validacionasignacion($fkID_asignacion)
+    {
+        $query  = "select COUNT(*) as contador FROM `asignacion_equipo` WHERE estado=1 and fkID_asignación='" . $fkID_asignacion . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Eliminar asignación
+    public function eliminarasignacion($fkID_asignacion)
+    {
+        $query  = "delete FROM `asignar` WHERE id_asignar='" . $fkID_asignacion . "'";
+        $result = mysqli_query($this->link, $query);
+        if (mysqli_affected_rows($this->link) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function validacionultimaasignacion()

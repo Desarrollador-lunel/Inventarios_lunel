@@ -32,12 +32,20 @@
             type: "POST",
             url: "../controlador/ajaxAsignacion.php",
             data: data,
+            dataType: "json",
             contentType: false,
             processData: false,
-            success: function(a) {  
-                console.log(a);
-                alert('Los siguientes seriales no fueron asignados debido a que no se encuentran en sistema '+a);
+            success: function(a) {
+                console.log(a['respuesta']);
+                console.log(a['seriales']);
+                if (a['seriales']!="") {
+                alert('Los siguientes seriales no fueron asignados debido a que no se encuentran en sistema o ya se encuentran asignados '+a['seriales']);
+                }
+                if (a['respuesta']!="eliminado") {
                 alert('Se a generado el acta de asignación para ser verificada y firmada');
+                location.href = "../server/php/prueba.xlsx";
+                }
+                window.location = "asignacion/pdf_actas.php?asignacion=al";
                 //location.reload();
             }
         })
@@ -78,7 +86,7 @@
 		} else {
 			return true;
 		}
-	}
+	}  
 
 	//validar el select de cargo
 	$("#fkID_cargar").change(function(){
@@ -109,6 +117,32 @@
 	      $(campo).addClass('is-invalid');
 	    }
 	}
+
+	$(document).on('change','input[name="archivo_asignacionl"]',function(){
+		var fileName = this.files[0].name;
+		var fileSize = this.files[0].size;
+
+		if(fileSize > 3000000){
+			alert('El archivo no debe superar los 3MB');
+			this.value = '';
+			this.files[0].name = '';
+		}else{
+			// recuperamos la extensión del archivo
+			var ext = fileName.split('.').pop();
+			// Convertimos en minúscula porque 
+			// la extensión del archivo puede estar en mayúscula
+			ext = ext.toLowerCase();
+			// console.log(ext);
+			switch (ext) {
+				case 'xls':
+				case 'xlsx': break;
+				default:
+					alert('El archivo no tiene la extensión adecuada debe ser .xls o .xlsx');
+					this.value = ''; // reset del valor
+					this.files[0].name = '';
+			}
+		}
+	});
 
 
 </script>

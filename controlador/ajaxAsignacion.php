@@ -35,8 +35,15 @@
           }
 		}else{
 			echo $extension;
-		} 
-    echo $mensajeserial;
+		}
+    //elimina el archivo cargado 
+    unlink($destino);
+    //array con la respuesta del procedimientp
+    $m = array(
+    "respuesta" => $mensaje,
+    "seriales" => $mensajeserial,
+    );
+    echo json_encode($m);
     };
 
 
@@ -68,31 +75,37 @@
 
     function validacion_serial($serial,$fkID_asignacion)
     { 
-      GLOBAL $fkID_persona_entrega, $fecha_asignacion, $fkID_persona_recibe,$mensajeserial;
+      GLOBAL $fkID_persona_entrega, $fecha_asignacion, $fkID_persona_recibe,$mensajeserial,$mensaje;
       $asignacion = new Asignacion();
       $resultado = $asignacion->validacionserial($serial);
       if ($resultado) {
           if ($resultado[0]["canti"]>0) {
-             if ($asignacion->insertaEquipoasignacion($resultado[0]["id_equipo"],$fkID_asignacion)) {
-                    if ($asignacion->insertaHistorico($resultado[0]["id_equipo"],$fkID_persona_entrega,$fkID_persona_recibe,$fkID_asignacion,$fecha_asignacion)) {
-                        $mensaje= "listo";
-                    }
-            } else {
-                $mensaje= "fallo";
-            }
+            $resultado2 = $asignacion->validacionserialasignado($resultado[0]["id_equipo"]);
+              if ($resultado2[0]["cantidad"]<1) {
+                if ($asignacion->insertaEquipoasignacion($resultado[0]["id_equipo"],$fkID_asignacion)) {
+                      if ($asignacion->insertaHistorico($resultado[0]["id_equipo"],$fkID_persona_entrega,$fkID_persona_recibe,$fkID_asignacion,$fecha_asignacion)) {
+                          $mensaje= "listo";
+                      }
+                } else {
+                    $mensaje= "fallo";
+                }
+              } else {
+                $mensajeserial = $mensajeserial . $serial . ",  ";
+              }
           } else {
             $mensajeserial = $mensajeserial . $serial . ",  ";
           }
-          
-         // echo json_encode($resultado); //imprime el json
       } else {
           $mensaje= "fallo";
       }
+      $resultado3 = $asignacion->validacionasignacion($fkID_asignacion);
+      if ($resultado3) {
+        if ($resultado3[0]["contador"]<1) {
+          if ($asignacion->eliminarasignacion($fkID_asignacion)){
+            $mensaje = "eliminado";
+          }
+        }
+      }
     }
-
-
-
-
-
 
 ?>
