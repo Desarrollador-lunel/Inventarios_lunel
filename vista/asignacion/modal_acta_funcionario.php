@@ -1,45 +1,25 @@
+<!-- Modal -->
 <?php
-// Jalamos las librerias de dompdf
-require_once '../../librerias/dompdf/autoload.inc.php';
-use Dompdf\Dompdf;
-// Inicializamos dompdf
-$dompdf = new Dompdf();
 setlocale(LC_ALL, "es_ES");
-include "funciones.php";
-$asignacion = $_GET["asignacion"]; 
-
-if ($asignacion=="al") {
-	$inicio = cadena_inicio();
-	$cadena = cadena_cuerpo();
-	crear_pdf($inicio,$cadena,$asignacion);
-}
-function cadena_inicio()
-{
-	//Se une la cadena con los estilos css de bootstrap
-	$inicio = '<!DOCTYPE html>
-	<html>
-	<head>
-		<title>Historico equipo</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	</head>
-	<body>
-	<!-- Modal -->
-	<?php
-	setlocale(LC_ALL, "es_ES");
-	?>';
-	return $inicio;
-}
-
-function cadena_cuerpo()
-{
-	$cadena = '<div class="modal-body">
+include "funciones.php"; 
+?>
+<div class="modal fade" id="modalActaFuncionario" tabindex="-1" role="dialog" aria-labelledby="modalActaFuncionarioTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalActaFuncionarioTitle">Acta de entrega</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
         <div class="row">
           <div id="contenidoActa" class="table-responsive">
             <table class="table table-bordered" >
               <thead>
                 <tr>
                   <th scope="col" colspan="4" class="text-center">
-                    <img src="../../imagenes/logo_lunel.png" class="img-fluid">
+                    <img src="../imagenes/logo_lunel.png" class="img-fluid">
                   </th>
                   <th scope="col" colspan="4" class="text-center">
                     <h4>
@@ -52,7 +32,7 @@ function cadena_cuerpo()
                   <th scope="col" colspan="4" class="text-center">
                     <strong>
                       Fecha y hora impresion:<br>
-       
+                      <?php echo date('Y-m-d H:i:s'); ?>
                     </strong>
                   </th>
                 </tr>
@@ -136,32 +116,18 @@ function cadena_cuerpo()
             <table class="table table-bordered" >
               <tbody>
                 <tr>
-                  <td scope="col" colspan="12" class="text-right"><p><small><em>Fecha y hora impresion :</small></em></p></td>
+                  <td scope="col" colspan="12" class="text-right"><p><small><em>Fecha y hora impresion :<?php echo date('Y-m-d H:i:s'); ?></small></em></p></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btn_imprimir"><i class="fas fa-print"></i></button>
+        <button type="button" class="btn btn-success" id="btn_excel"><i class="fas fa-file-excel"></i></button>
+        <button type="button" class="btn btn-danger" id="btn_pdf"><i class="far fa-file-pdf"></i></button>
+      </div>
     </div>
   </div>
-</div>';
-return $cadena;
-}
-//Reemplaza URL de la imagen
-//$cadena = str_replace('<img src="../imagenes/logo_lunel.png" class="img-fluid">', '<img src="../../imagenes/logo_lunel.png" >', $_GET["tabla"]);
-
-function crear_pdf($inicio,$cadena,$asignacion)
-{
-	global $dompdf;
-	//Unimos
-$cadena_final = $inicio . $cadena;
-$dompdf->loadHtml($cadena_final);
-// Colocamos als propiedades de la hoja
-$dompdf->setPaper("A4", "landscape");
-// Escribimos el html en el PDF
-$dompdf->render();
-// Ponemos el PDF en el browser
-$dompdf->stream("Acta-entrega-".$asignacion);
-
-}
+</div>

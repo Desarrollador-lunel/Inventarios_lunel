@@ -5,6 +5,8 @@
 		$("#btn_guardar_Asignacionl").attr("data-accion","crear"); 
 		$("#form_Asignacionl")[0].reset();
 		$("#form_Asignacionla")[0].reset();
+		$("#fkID_persona_recibela").empty()
+        $("#fkID_persona_recibela").append("<option selected value='0'>Seleccione</option>");
 		$('#automatico').hide(); //oculto mediante id
         $('#manual').hide(); //oculto mediante id
         $("#fkID_cargar").val(0);
@@ -15,7 +17,7 @@
 		respuesta = validar_campos_cargarla();
 		if (respuesta) {
 		crea_asignacionla();
-		}
+		}  
 	});
 
 	//Funcion para crear proyecto
@@ -88,7 +90,7 @@
 		}
 	}  
 
-	//validar el select de cargo
+	//validar el select de carga
 	$("#fkID_cargar").change(function(){
         fkID_cargar = $("#fkID_cargar").val();
         console.log(fkID_cargar);
@@ -105,6 +107,48 @@
             $('#automatico').hide(); //oculto mediante id
         } 
     });
+
+    //validar el select de proyecto para cargar coordinador
+	$("#fkID_proyectola").change(function(){
+            fkID_proyectola = $("#fkID_proyectola").val();
+            console.log(fkID_proyectola );
+            if (fkID_proyectola  > 0 ) {
+            	$("#fkID_persona_recibela").empty()
+            	//$("#fkID_persona_recibela").append("<option selected value='0'>Seleccione</option>");
+            	cargar_coordinador(fkID_proyectola);
+            } else {
+            	$("#fkID_persona_recibela").empty()
+            	$("#fkID_persona_recibela").append("<option selected value='0'>Seleccione</option>");
+            }
+        });
+
+	//Carga territoriales del proyecto
+	function cargar_coordinador(fkID_proyectola){
+	    $.ajax({
+	    	type: "POST",
+            url: "../controlador/ajaxAsignacion.php",
+	        data: "fkID_proyecto="+fkID_proyectola+"&tipo=consultacoordinador",
+	        dataType: 'json'
+	    })
+	    .done(function(data) {
+	    	console.log(data);
+	    	if (data!=0) {
+	        $.each(data, function (key, value) {
+	        	console.log("holaa goku")
+                $("#fkID_persona_recibela").append("<option selected value=" + value.id_persona + ">" + value.persona + "</option>");
+            }); 
+	    } else {
+	    	alert("El proyecto no tiene coordinador creado debe crearlo");
+	    }
+	    })
+	    .fail(function(data) {
+	        console.log(data);
+	    })
+	    .always(function(data) {
+	        console.log(data);
+	    })
+	};
+
 
 	//Funcion para marcar los campos
 	function marcar_campos(campo, tipo){

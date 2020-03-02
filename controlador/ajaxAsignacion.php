@@ -46,6 +46,15 @@
     echo json_encode($m);
     };
 
+    if ($tipo == 'consultacoordinador') {
+        $resultado = $asignacion->getPersona($fkID_proyecto);
+        if ($resultado) {
+            echo json_encode($resultado); //imprime el json
+        } else {
+            echo "0";
+        }
+    };
+
 
     function Leer_archivo($destino,$fkID_asignacion){
     	//Variable con el nombre del archivo
@@ -106,6 +115,11 @@
           }
         }
       }
+    }
+
+    function Actaasignacionl($value='')
+    {
+      
     }
 
 ?>

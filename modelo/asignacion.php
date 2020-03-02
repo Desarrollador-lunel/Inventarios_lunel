@@ -271,9 +271,9 @@ class Asignacion
     }
 
     //Trae todas los empleados
-    public function getPersona()
+    public function getPersona($fkID_proyecto)
     {
-        $query  = "select id_persona, CONCAT(documento_persona,' - ',  nombres_persona,' ', apellidos_persona) As persona FROM `persona` WHERE estado=1 and fkID_cargo=1 OR fkID_cargo=2";
+        $query  = "select id_persona, CONCAT(documento_persona,' - ',  nombres_persona,' ', apellidos_persona) As persona FROM `persona` WHERE estado=1 and fkID_cargo=2 and fkID_proyecto='". $fkID_proyecto . "'";
         $result = mysqli_query($this->link, $query);
         $data   = array();
         while ($data[] = mysqli_fetch_assoc($result));

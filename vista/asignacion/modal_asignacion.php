@@ -9,15 +9,15 @@
         </button> 
       </div>
       <div class="modal-header">
-          <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Cargar datos:</label>
-            <div class="col-sm-8">
+          <div class="form-group row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label for="inputEmail3" class="col-form-label text-right">&nbsp; &nbsp;&nbsp;&nbsp;Cargar datos:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="text-center">
               <select class="form-control" id="fkID_cargar"  required>
                 <option selected value="0">Seleccione..</option>
                 <option value="1">Cargar automáticamente</option>
                 <option value="2">Cargar manualmente</option>
               </select>
-            </div>
+            </div> 
           </div>
           </div>
           <div class="modal-body">
@@ -27,7 +27,7 @@
           		<input type="hidden" id="fkID_persona_entregala" value="<?php echo $idUsuario ?>">
           		<div class="form-group row">
 		            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Proyecto:</label>
-		            <div class="col-sm-8">
+		            <div class="col-sm-6">
 		              <select class="form-control" id="fkID_proyectola"  required>
 		                <?php getSelectProyecto();?>
 		              </select>
@@ -35,15 +35,19 @@
 		          </div>
 		          <div class="form-group row">
 		            <label for="inputEmail3" class="col-sm-4 col-form-label text-right">Coordinador:</label>
-		            <div class="col-sm-8">
+		            <div class="col-sm-6">
 		              <select class="form-control" id="fkID_persona_recibela"  required>
-		                <?php getSelectPersona();?>
+                    <option selected value="0">Seleccione..</option>
+		                <?php //getSelectPersona();?>
 		              </select>
-		            </div>  
+		            </div> 
+                <div class="col-sm-2">
+              <button type="button" class="btn btn-primary" data-target="#modalMarca" data-toggle="modal"><i class="fas fa-plus"></i></button>
+            </div>  
 		          </div>
 		          <div class="form-group row">
 		            <label for="dateAsignacionl" class="col-sm-4 col-form-label text-right">Fecha asignación:</label>
-		            <div class="col-sm-8">
+		            <div class="col-sm-6">
 		              <input class="form-control" type="date" id="fecha_asignacionla" required="true">
 		            </div> 
 		          </div>
@@ -78,7 +82,7 @@
 		          </div>
 		          <div class="form-group row">
 		            <div class="col-sm-12 text-center">
-		              <button data-accion="crear" type="button" class="btn btn-success" id="btn_guardar_Asignacionla">Guardar</button>
+		              <button data-accion="crear" type="button" class="btn btn-success" id="btn_guardar_Asignacionla" data-target="#modalActaFuncionario" data-toggle="modal">Guardar</button>
 		            </div>
 		          </div>
           	</form>
@@ -160,3 +164,4 @@
     </div>
   </div>
 </div>
+<?php include "modal_acta_funcionario.php";?> 
