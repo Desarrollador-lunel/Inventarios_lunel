@@ -134,6 +134,38 @@ class Asignacion
         return $data;
     }
 
+    //Trae todos los datos para el acta
+    public function getConsultapersonas_acta($id_asignacion)
+    {
+        $query  = "select id_asignar,consecutivo_asignar,nombre_proyecto,observacion,YEAR(fecha_asignacion) as anio,MONTH(fecha_asignacion) as MES,DAY(fecha_asignacion) as dia,concat(nombres_persona,' ',apellidos_persona) as nombre_entrega,(SELECT concat(nombres_persona,' ',apellidos_persona) from persona where id_persona= fkID_persona_recibe and asignar.estado= 1 ) as nombres_recibe,(SELECT nombre_cargo from persona
+            INNER JOIN cargo on id_cargo = persona.fkID_cargo where id_persona= fkID_persona_recibe and asignar.estado= 1 ) as cargo_recibe,(SELECT documento_persona from persona where id_persona= fkID_persona_recibe and asignar.estado= 1 ) as documento_recibe,nombre_cargo as cargo_entrega,documento_persona as documento_entrega FROM `asignar`
+            INNER JOIN proyecto on id_proyecto = fkID_proyecto
+            INNER JOIN persona on id_persona = fkID_persona_entrega
+            INNER JOIN cargo on id_cargo = persona.fkID_cargo
+            WHERE id_asignar='" . $id_asignacion . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
+    //Trae todos los equipos para el acta
+    public function getConsultaequipos_acta($id_asignacion)
+    {
+        $query  = "select asignacion_equipo.*,id_equipo,serial_equipo,nombre_tipo_equipo,nombre_modelo,nombre_marca FROM `asignacion_equipo` 
+            INNER JOIN equipo on id_equipo = fkid_equipo
+            INNER JOIN tipo_equipo on id_tipo_equipo = fkid_tipo_equipo
+            INNER JOIN modelo on id_modelo = fkid_modelo
+            INNER JOIN marca on id_marca = fkid_marca
+            WHERE asignacion_equipo.estado=1 and fkID_asignación='" . $id_asignacion . "'";
+        $result = mysqli_query($this->link, $query);
+        $data   = array();
+        while ($data[] = mysqli_fetch_assoc($result));
+        array_pop($data);
+        return $data;
+    }
+
     //Valida que el serial exista
     public function validacionserial($serial)
     {

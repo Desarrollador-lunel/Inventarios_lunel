@@ -47,7 +47,7 @@
                 alert('Se a generado el acta de asignación para ser verificada y firmada');
                 location.href = "../server/php/prueba.xlsx";
                 }
-                window.location = "asignacion/pdf_actas.php?asignacion=al";
+                window.location = "asignacion/pdf_actas.php?asignacion=al&id_asignacion="+ a['id'];
                 //location.reload();
             }
         })

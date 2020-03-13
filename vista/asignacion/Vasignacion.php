@@ -7,7 +7,7 @@
     $permisoconsulta = $asignacion->getPermisosconsulta($idUsuario);
     include "scripts_asignacion.php";
 ?>
-<nav>
+<nav>  
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
   	<?php if ($permisosal[0]["ver"]==1) {
      ?>

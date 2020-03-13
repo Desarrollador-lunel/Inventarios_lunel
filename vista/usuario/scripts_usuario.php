@@ -15,6 +15,7 @@ console.log(len)
 		$("#pass_usuario").attr('disabled', 'disabled');
 		$("#nombre_cargo").prop('disabled', true);
 		$("#btnadicionempleado").prop('disabled', false);
+		$("#fkID_persona").attr('disabled', false);
 		$("#btn_guardando").hide();
 	});
 
@@ -133,7 +134,7 @@ console.log(len)
 		$("#modalUsuarioLabel").text("Editar Usuario");
 		$("#fkID_persona").attr('disabled', 'disabled');
 		$("#nombre_cargo").prop('disabled', true);
-		$("#nombre_usuario").prop('disabled', false);
+		$("#nombre_usuario").prop('disabled', true);
 	 	$("#pass_usuario").prop('disabled', false);
 	 	$("#btnadicionempleado").prop('disabled', true);
 		carga_Usuario(id_Usuario);
@@ -461,7 +462,7 @@ console.log(len)
 	 				$("#pass_usuario").val('');
 	 				$("#nombre_cargo").val('');
 	 				$("#fkID_persona").val('');
-	 				$("#fkID_persona").append("<option value='0'>Seleccione..</option>");
+	 				//$("#fkID_persona").append("<option value='0'>Seleccione..</option>");
 					}
 	    })
 	    .fail(function(data) {

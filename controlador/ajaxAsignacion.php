@@ -42,6 +42,7 @@
     $m = array(
     "respuesta" => $mensaje,
     "seriales" => $mensajeserial,
+    "id" => $fkID_asignacion,
     );
     echo json_encode($m);
     };
